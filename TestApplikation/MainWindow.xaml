@@ -1,0 +1,12 @@
+﻿<Window x:Class="TestApplikation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestApplikation"
+        mc:Ignorable="d"
+        Title="Fönster" Height="220" Width="200">    
+    <Grid>
+        <TextBlock Height="150" HorizontalAlignment="Left" Margin="10" Width="150" Name="TextBlock1"></TextBlock>
+    </Grid>
+</Window>
