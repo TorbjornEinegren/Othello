@@ -12,3 +12,17 @@ c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikati
 c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.csproj.GenerateResource.Cache
 c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.exe
 c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.pdb
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.exe.config
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.exe
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.pdb
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.exe
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.pdb
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.csprojResolveAssemblyReference.cache
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\MainWindow.g.cs
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\App.g.cs
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.cache
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.lref
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\MainWindow.baml
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.g.resources
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.Properties.Resources.resources
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.csproj.GenerateResource.Cache

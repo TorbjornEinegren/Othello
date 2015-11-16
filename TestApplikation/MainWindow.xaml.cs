@@ -25,10 +25,9 @@ namespace TestApplikation
         {
             InitializeComponent();
             rulesEngine = new RulesEngine();
-            initateMove(4, 4, 2);
             printBox(TextBlock1);
         }
-
+        
         private void initateMove(int row,int column,int player)
         {
             Console.WriteLine("initateMove: row " + row + " column " + column);
