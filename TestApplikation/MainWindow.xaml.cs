@@ -20,24 +20,16 @@ namespace TestApplikation
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Game game;
         private RulesEngine rulesEngine;
         public MainWindow()
         {
             InitializeComponent();
             rulesEngine = new RulesEngine();
-            printBox(TextBlock1);
-        }
-        
-        private void initateMove(int row,int column,int player)
-        {
-            Console.WriteLine("initateMove: row " + row + " column " + column);
-            if (row <= 7 && column <= 7)
-            {
-                rulesEngine.makeMove(row,column,player);
-            }
+            game = new Game(this, rulesEngine);
         }
 
-        private void printBox(TextBlock TextBlock1)
+        public void printBox(TextBlock TextBlock1)
         {
             String stringtest = "";
             int inttest;
