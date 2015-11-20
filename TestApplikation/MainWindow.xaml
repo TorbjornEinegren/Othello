@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestApplikation"
         mc:Ignorable="d"
-        Title="Fönster" Height="220" Width="200">    
+        Title="Fönster" Height="500" Width="500">    
     <Grid>
         <TextBlock Height="150" HorizontalAlignment="Left" Margin="10" Width="150" Name="TextBlock1"></TextBlock>
+        <Button x:Name="button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Click="button_Click">
+            <StackPanel>
+               <Image Name="image1" Source="Blank.bmp"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

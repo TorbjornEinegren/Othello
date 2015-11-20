@@ -9,7 +9,7 @@ namespace TestApplikation
     public class Game
     {
         public RulesEngine rulesEngine;
-        private PlayerAbstract player1;
+        public  PlayerAbstract player1;
         private PlayerAbstract player2;
         private MainWindow mainWindow;
 
@@ -23,7 +23,7 @@ namespace TestApplikation
             mainWindow.printBox(mainWindow.TextBlock1);
         }
 
-        private void initateMove(int row, int column, PlayerAbstract player)
+        public void initateMove(int row, int column, PlayerAbstract player)
         {
             Console.WriteLine("initateMove: row " + row + " column " + column);
             if (row <= 7 && column <= 7)

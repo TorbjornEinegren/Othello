@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace TestApplikation
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private Game game;
@@ -55,6 +52,12 @@ namespace TestApplikation
                 stringtest = stringtest + "\n";
             }
             TextBlock1.Text = stringtest;
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            game.initateMove(4, 4, game.player1);
+            image1.Source = new BitmapImage(new Uri("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp")); ;
         }
     }
 }

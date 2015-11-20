@@ -65,6 +65,34 @@ namespace TestApplikation
             move++;
         }
 
+        private void winState()
+        {
+            int whiteScore = 0;
+            int blackScore = 0;
+            for (int row = 0; row < 8; row++)
+            {
+                for (int column = 0; column < 8; column++)
+                {
+                    if (board.getBoardPosition(row, column) == 1)
+                    {
+                        whiteScore++;
+                    }
+                    else
+                    {
+                        blackScore++;
+                    }
+                }
+            }
+            if (whiteScore > blackScore)
+            {
+                Console.WriteLine("White won!");
+            }
+            else
+            {
+                Console.WriteLine("Black won!");
+            }
+        }
+
         public void makeMove(int row, int column, int player)
         {
             if (isMoveLegal(row, column))
@@ -73,6 +101,10 @@ namespace TestApplikation
                 Console.WriteLine("makeMove: isLegal");
                 turnTile(row, column, player);
                 moveCounter();
+                if (move >= 64)
+                {
+                    winState();
+                }
             }
             else
             {
