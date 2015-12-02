@@ -10,17 +10,37 @@ namespace TestApplikation
     {
         public RulesEngine rulesEngine;
         public  PlayerAbstract player1;
-        private PlayerAbstract player2;
+        public  PlayerAbstract player2;
+        public PlayerAbstract currentPlayer;
         private MainWindow mainWindow;
 
         public Game(MainWindow mainWindow, RulesEngine rulesEngine)
         {
             this.mainWindow = mainWindow;
             this.rulesEngine = rulesEngine;
-            player1 = new Human("Fritjof", 1);
-            player2 = new AI(2);
             //initateMove(4,4, player2);
-            mainWindow.printBox(mainWindow.TextBlock1);
+            //mainWindow.printBox(mainWindow.TextBlock1);
+        }
+
+        private void startingCurrentPlayer(PlayerAbstract startingPlayer)
+        {
+            currentPlayer = startingPlayer;
+        }
+
+        public void setCurrentPlayer(int color)
+        {
+            if (color == 1)
+            {
+                player1 = new Human("Fritjof", 1);
+                player2 = new AI(2);
+                startingCurrentPlayer(player1);
+            }
+            else
+            {
+                player1 = new Human("Fritjof", 2);
+                player2 = new AI(1);
+                startingCurrentPlayer(player2);
+            }
         }
 
         public void initateMove(int row, int column, PlayerAbstract player)

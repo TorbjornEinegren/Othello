@@ -37,12 +37,12 @@ namespace TestApplikation
             //sets the starting positions for the players
             //0 is an empty spot, 1 is white and 2 is black
             board = new Board();
-            board.setBoardPosition(3, 3, 1);
+            /*board.setBoardPosition(3, 3, 1);
             board.setBoardPosition(3, 4, 2);
             board.setBoardPosition(4, 3, 2);
-            board.setBoardPosition(4, 4, 1);
+            board.setBoardPosition(4, 4, 1);*/
             //testvalues for turning tiles
-            /*board.setBoardPosition(3, 3, 1);
+            board.setBoardPosition(3, 3, 1);
             board.setBoardPosition(3, 4, 1);
             board.setBoardPosition(3, 5, 1);
             board.setBoardPosition(4, 3, 1);
@@ -57,7 +57,7 @@ namespace TestApplikation
             board.setBoardPosition(4, 6, 2);
             board.setBoardPosition(6, 2, 2);
             board.setBoardPosition(6, 4, 2);
-            board.setBoardPosition(6, 6, 2);*/
+            board.setBoardPosition(6, 6, 2);
         }
 
         private void moveCounter()

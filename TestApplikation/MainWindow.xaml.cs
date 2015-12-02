@@ -24,40 +24,81 @@ namespace TestApplikation
             InitializeComponent();
             rulesEngine = new RulesEngine();
             game = new Game(this, rulesEngine);
+            initButtons();
+            //chooseColor();
         }
 
-        public void printBox(TextBlock TextBlock1)
+        private void initButtons()
         {
-            String stringtest = "";
-            int inttest;
-            for (int row = 0; row < 8; row++)
+            
+            for (int i = 0; i < 8; i++)
             {
-                if (row == 0)
+                for (int j = 0; j < 8; j++)
                 {
-                    stringtest = stringtest + "     A   B  C   D  E   F   G   H\n";
+                    Image blankImage = new Image();
+                    blankImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Blank.bmp") as ImageSource;
+
+                    System.Windows.Controls.Button newBtn = new Button();
+                    newBtn.Name = "_" + ((i+1) * (j+1));
+                    newBtn.Height = 50;
+                    newBtn.Width = 50;
+                    newBtn.Content = blankImage;
+                    newBtn.Click += new RoutedEventHandler(button_Click);
+
+                    Grid.SetRow(newBtn, i);
+                    Grid.SetColumn(newBtn, j);
+
+
+                    buttonGrid.Children.Add(newBtn);
                 }
-                for (int column = 0; column < 8; column++)
-                {
-                    if (column == 0)
-                    {
-                        stringtest = stringtest + (row + 1) + "   ";
-                    }
-                    if (column < 8)
-                    {
-                        inttest = rulesEngine._board.getBoardPosition(row, column);
-                        stringtest = stringtest + inttest.ToString();
-                        stringtest = stringtest + "   ";
-                    }
-                }
-                stringtest = stringtest + "\n";
             }
-            TextBlock1.Text = stringtest;
+        }
+
+        private void chooseColor()
+        {
+            Image image1 = new Image();
+            Image image2 = new Image();
+            image1.Source = new BitmapImage(new Uri("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp"));
+            image2.Source = new BitmapImage(new Uri("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Dark.bmp"));
+            image1.Width = 250;
+            image1.Height = 250;
+            image2.Width = 250;
+            image2.Height = 250;
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            game.initateMove(4, 4, game.player1);
-            image1.Source = new BitmapImage(new Uri("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp")); ;
+            int senderID = Convert.ToInt32(((Button)sender).Name.Substring(1));
+
+            Console.WriteLine(senderID);
         }
     }
 }
+
+//public void printBox(TextBlock TextBlock1)
+//{
+//    String stringtest = "";
+//    int inttest;
+//    for (int row = 0; row < 8; row++)
+//    {
+//        if (row == 0)
+//        {
+//            stringtest = stringtest + "     A   B  C   D  E   F   G   H\n";
+//        }
+//        for (int column = 0; column < 8; column++)
+//        {
+//            if (column == 0)
+//            {
+//                stringtest = stringtest + (row + 1) + "   ";
+//            }
+//            if (column < 8)
+//            {
+//                inttest = rulesEngine._board.getBoardPosition(row, column);
+//                stringtest = stringtest + inttest.ToString();
+//                stringtest = stringtest + "   ";
+//            }
+//        }
+//        stringtest = stringtest + "\n";
+//    }
+//    TextBlock1.Text = stringtest;
+//}
