@@ -18,13 +18,23 @@ namespace TestApplikation
         {
             this.mainWindow = mainWindow;
             this.rulesEngine = rulesEngine;
-            //initateMove(4,4, player2);
-            //mainWindow.printBox(mainWindow.TextBlock1);
         }
 
         private void startingCurrentPlayer(PlayerAbstract startingPlayer)
         {
             currentPlayer = startingPlayer;
+        }
+
+        private void changeCurrentPlayer()
+        {
+            if(currentPlayer == player1)
+            {
+                currentPlayer = player2;
+            }
+            else
+            {
+                currentPlayer = player1;
+            }
         }
 
         public void setStartingPlayer(String colorStr)
@@ -43,12 +53,14 @@ namespace TestApplikation
             }
         }
 
-        public void initateMove(int row, int column, PlayerAbstract player)
+        public void initateMove(int row, int column)
         {
+            Boolean doItAgain = false;
             Console.WriteLine("initateMove: row " + row + " column " + column);
-            if (row <= 7 && column <= 7)
+            doItAgain = rulesEngine.makeMove(row, column, currentPlayer._color);
+            if (doItAgain)
             {
-                rulesEngine.makeMove(row, column, player._color);
+                changeCurrentPlayer();
             }
         }
     }

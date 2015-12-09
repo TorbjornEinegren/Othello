@@ -59,9 +59,9 @@ namespace TestApplikation
             System.Windows.Controls.TextBlock textBlock = new TextBlock();
             textBlock.Height = 100;
             textBlock.Width = 200;
-            textBlock.Text = "hej";
-            Grid.SetRow(lightBtn, 2);
-            Grid.SetColumn(lightBtn, 3);
+            textBlock.Text = "Välj färg!";
+            Grid.SetRow(textBlock, 2);
+            Grid.SetColumn(textBlock, 3);
             buttonGrid.Children.Add(textBlock);
         }
 
@@ -71,39 +71,54 @@ namespace TestApplikation
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    Image blankImage = new Image();
-                    blankImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Blank.bmp") as ImageSource;
-
+                    Image blankImage = changeColor(i,j);
                     System.Windows.Controls.Button newBtn = new Button();
-                    newBtn.Name = "_" + ((i + 1) * (j + 1));
+
+                    newBtn.Name = "_" + i + "_"+ j;
                     newBtn.Height = 50;
                     newBtn.Width = 50;
                     newBtn.Content = blankImage;
-                    newBtn.Click += new RoutedEventHandler(buttonClick);
+                    newBtn.Click += new RoutedEventHandler(colorClick);
 
                     Grid.SetRow(newBtn, i);
                     Grid.SetColumn(newBtn, j);
-
-
                     buttonGrid.Children.Add(newBtn);
                 }
             }
         }
 
+        private Image changeColor(int i, int j)
+        {
+            Image image = new Image();
+            int color = rulesEngine._board.getBoardPosition(i, j);
+            if (color == 0)
+            {
+                image.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Blank.bmp") as ImageSource;
+            }
+            else if (color == 1)
+            {
+                image.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp") as ImageSource;
+            }
+            else if (color == 2)
+            {
+                image.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Dark.bmp") as ImageSource;
+            }
+            return image;
+        }
+
         private void buttonClick(object sender, RoutedEventArgs e)
         {
             String colorStr = ((Button)sender).Name;
-
             game.setStartingPlayer(colorStr);
-
             initGameboard();
         }
 
         private void colorClick(object sender, RoutedEventArgs e)
         {
-            int senderID = Convert.ToInt32(((Button)sender).Name.Substring(1));
+            int row = Convert.ToInt32(((Button)sender).Name.Substring(1,1));
+            int column = Convert.ToInt32(((Button)sender).Name.Substring(3));
 
-            Console.WriteLine(senderID);
+            game.initateMove(row, column);
         }
     }
 }

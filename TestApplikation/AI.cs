@@ -11,7 +11,7 @@ namespace TestApplikation
         public AI(int color)
         {
             this._name = "Dumburk";
-            this._tilesRemaining = 32;
+            this._tilesRemaining = 30;
             this._color = color;
         }
     }

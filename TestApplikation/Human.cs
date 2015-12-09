@@ -11,7 +11,7 @@ namespace TestApplikation
         public Human(String name, int color)
         {
             this._name = name;
-            this._tilesRemaining = 32;
+            this._tilesRemaining = 30;
             this._color = color;
         }
     }
