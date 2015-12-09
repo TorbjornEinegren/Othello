@@ -27,15 +27,15 @@ namespace TestApplikation
             currentPlayer = startingPlayer;
         }
 
-        public void setCurrentPlayer(int color)
+        public void setStartingPlayer(String colorStr)
         {
-            if (color == 1)
+            if (colorStr.Equals("light"))
             {
                 player1 = new Human("Fritjof", 1);
                 player2 = new AI(2);
                 startingCurrentPlayer(player1);
             }
-            else
+            else if (colorStr.Equals("dark"))
             {
                 player1 = new Human("Fritjof", 2);
                 player2 = new AI(1);

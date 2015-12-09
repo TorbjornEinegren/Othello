@@ -24,13 +24,49 @@ namespace TestApplikation
             InitializeComponent();
             rulesEngine = new RulesEngine();
             game = new Game(this, rulesEngine);
-            initButtons();
-            //chooseColor();
+            initGame();
         }
 
-        private void initButtons()
+        private void initGame()
         {
-            
+            chooseColor();
+            //Gameboard is initialized through a click in colorClick()            
+        }
+
+        private void chooseColor()
+        {
+            Image darkImage = new Image();
+            Image lightImage = new Image();
+            darkImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp") as ImageSource;
+            lightImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Dark.bmp") as ImageSource;
+
+            System.Windows.Controls.Button darkBtn = new Button();
+            darkBtn.Name = "dark";
+            darkBtn.Content = darkImage;
+            darkBtn.Click += new RoutedEventHandler(buttonClick);
+            Grid.SetRow(darkBtn,3);
+            Grid.SetColumn(darkBtn,3);
+            buttonGrid.Children.Add(darkBtn);
+
+            System.Windows.Controls.Button lightBtn = new Button();
+            lightBtn.Name = "light";
+            lightBtn.Content = lightImage;
+            lightBtn.Click += new RoutedEventHandler(buttonClick);
+            Grid.SetRow(lightBtn, 3);
+            Grid.SetColumn(lightBtn, 4);
+            buttonGrid.Children.Add(lightBtn);
+
+            System.Windows.Controls.TextBlock textBlock = new TextBlock();
+            textBlock.Height = 100;
+            textBlock.Width = 200;
+            textBlock.Text = "hej";
+            Grid.SetRow(lightBtn, 2);
+            Grid.SetColumn(lightBtn, 3);
+            buttonGrid.Children.Add(textBlock);
+        }
+
+        private void initGameboard()
+        {
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -39,11 +75,11 @@ namespace TestApplikation
                     blankImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Blank.bmp") as ImageSource;
 
                     System.Windows.Controls.Button newBtn = new Button();
-                    newBtn.Name = "_" + ((i+1) * (j+1));
+                    newBtn.Name = "_" + ((i + 1) * (j + 1));
                     newBtn.Height = 50;
                     newBtn.Width = 50;
                     newBtn.Content = blankImage;
-                    newBtn.Click += new RoutedEventHandler(button_Click);
+                    newBtn.Click += new RoutedEventHandler(buttonClick);
 
                     Grid.SetRow(newBtn, i);
                     Grid.SetColumn(newBtn, j);
@@ -54,19 +90,16 @@ namespace TestApplikation
             }
         }
 
-        private void chooseColor()
+        private void buttonClick(object sender, RoutedEventArgs e)
         {
-            Image image1 = new Image();
-            Image image2 = new Image();
-            image1.Source = new BitmapImage(new Uri("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp"));
-            image2.Source = new BitmapImage(new Uri("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Dark.bmp"));
-            image1.Width = 250;
-            image1.Height = 250;
-            image2.Width = 250;
-            image2.Height = 250;
+            String colorStr = ((Button)sender).Name;
+
+            game.setStartingPlayer(colorStr);
+
+            initGameboard();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void colorClick(object sender, RoutedEventArgs e)
         {
             int senderID = Convert.ToInt32(((Button)sender).Name.Substring(1));
 
