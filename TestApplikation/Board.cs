@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestApplikation
 {
@@ -19,9 +15,19 @@ namespace TestApplikation
         {
             return boardArray[row, column];
         }
+
+        public Action<int[]> onBoardChange { get; set; }
+
         public void setBoardPosition(int row, int column, int player)
         {
             boardArray[row, column] = player;
+            int[] argArr = { row, column };
+            // notify Subscribers
+            Action<int[]> localOnChange = onBoardChange;
+            if (localOnChange != null)
+            {
+                localOnChange(argArr);
+            }
         }
 
     }

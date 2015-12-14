@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestApplikation
 {
@@ -13,6 +9,12 @@ namespace TestApplikation
             this._name = name;
             this._tilesRemaining = 30;
             this._color = color;
+            this._isAI = false;
+        }
+
+        public override void doThings(Game game)
+        {
+            Console.WriteLine(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
         }
     }
 }

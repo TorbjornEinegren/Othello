@@ -21,6 +21,21 @@ namespace TestApplikation
             }
         }
 
+        private Boolean isAI;
+        public Boolean _isAI
+        {
+            get
+            {
+                return isAI;
+            }
+            set
+            {
+                isAI = value;
+            }
+        }
+
+        public abstract void doThings(Game game);
+
         private int tilesRemaining;
         public int _tilesRemaining
         {

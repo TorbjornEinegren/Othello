@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestApplikation
 {
@@ -107,6 +103,7 @@ namespace TestApplikation
                     winState();
                 }
                 doItAgain = true;
+                Console.WriteLine("Nice move!");
             }
             else
             {
@@ -134,6 +131,7 @@ namespace TestApplikation
             int lastRow = row;
             int lastColumn = column;
             int currentColumn = column;
+            Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
                 Console.WriteLine("turnBotLeft: for i = " + i);
@@ -143,9 +141,14 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
-                    lastRow = i;
-                    lastColumn = currentColumn;
-                    Console.WriteLine("turnBotLeft: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                    if (!firstLoop)
+                    {
+                        lastRow = i;
+                        lastColumn = currentColumn;
+                        Console.WriteLine("turnBotLeft: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                        break;
+                    }
+                    firstLoop = false;
                 }
                 if (currentColumn > 0)
                 {
@@ -171,6 +174,7 @@ namespace TestApplikation
             int lastRow = row;
             int lastColumn = column;
             int currentColumn = column;
+            Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
                 Console.WriteLine("turnBotRight: for i = " + i);
@@ -180,9 +184,14 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
-                    lastRow = i;
-                    lastColumn = currentColumn;
-                    Console.WriteLine("turnBotRight: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                    if (!firstLoop)
+                    {
+                        lastRow = i;
+                        lastColumn = currentColumn;
+                        Console.WriteLine("turnBotRight: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                        break;
+                    }
+                    firstLoop = false;
                 }
                 if (currentColumn < 7)
                 {
@@ -208,6 +217,7 @@ namespace TestApplikation
             int lastRow = row;
             int lastColumn = column;
             int currentColumn = column;
+            Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
                 Console.WriteLine("turnTopLeft: for i = " + i);
@@ -217,11 +227,17 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
-                    lastRow = i;
-                    lastColumn = currentColumn;
-                    Console.WriteLine("turnTopLeft: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                    Console.WriteLine("Skit händer");
+                    if (!firstLoop)
+                    {
+                        lastRow = i;
+                        lastColumn = currentColumn;
+                        Console.WriteLine("turnTopLeft: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                        break;
+                    }
+                    firstLoop = false;
                 }
-                if (currentColumn < 0)
+                if (currentColumn > 0)
                 {
                     currentColumn--;
                 }
@@ -245,6 +261,7 @@ namespace TestApplikation
             int lastRow = row;
             int lastColumn = column;
             int currentColumn = column;
+            Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
                 Console.WriteLine("turnTopRight: for i = " + i + " currentColumn " + currentColumn);
@@ -254,9 +271,14 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
-                    lastRow = i;
-                    lastColumn = currentColumn;
-                    Console.WriteLine("turnTopRight: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                    if (!firstLoop)
+                    {
+                        lastRow = i;
+                        lastColumn = currentColumn;
+                        Console.WriteLine("turnTopRight: lastRow = " + lastRow + " and lastColumn " + lastColumn);
+                        break;
+                    }
+                    firstLoop = false;
                 }
                 if (currentColumn < 7)
                 {
@@ -280,6 +302,7 @@ namespace TestApplikation
         {
             //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
+            Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
                 Console.WriteLine("turnVerticalUp: for i = " + i);
@@ -289,8 +312,13 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, column) == player)
                 {
-                    lastRow = i;
-                    Console.WriteLine("turnVerticalUp: lastRow = " + lastRow);
+                    if (!firstLoop)
+                    {
+                        lastRow = i;
+                        Console.WriteLine("turnVerticalUp: lastRow = " + lastRow);
+                        break;
+                    }
+                    firstLoop = false;
                 }
             }
             //The actual turning
@@ -305,6 +333,7 @@ namespace TestApplikation
         {
             //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
+            Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
                 Console.WriteLine("turnVerticalDown: for i = " + i);
@@ -314,8 +343,13 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, column) == player)
                 {
-                    lastRow = i;
-                    Console.WriteLine("turnVerticalDown: lastColumn = " + lastRow);
+                    if (!firstLoop)
+                    {
+                        lastRow = i;
+                        Console.WriteLine("turnVerticalDown: lastColumn = " + lastRow);
+                        break;
+                    }
+                    firstLoop = false;
                 }
             }
             //The actual turning
@@ -330,6 +364,7 @@ namespace TestApplikation
         {
             //finds the last tile of the same player and turns the ones in between
             int lastColumn = column;
+            Boolean firstLoop = true;
             for (int i = column; i >= 0; i--)
             {
                 Console.WriteLine("turnHorizontalLeft: for i = " + i);
@@ -339,8 +374,13 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(row, i) == player)
                 {
-                    lastColumn = i;
-                    Console.WriteLine("turnHorizontalLeft: lastColumn = " + lastColumn);
+                    if (!firstLoop)
+                    {
+                        lastColumn = i;
+                        Console.WriteLine("turnHorizontalLeft: lastColumn = " + lastColumn);
+                        break;
+                    }
+                    firstLoop = false;
                 }
             }
             //The actual turning
@@ -355,6 +395,7 @@ namespace TestApplikation
         {
             //finds the last tile of the same player and turns the ones in between
             int lastColumn = column;
+            Boolean firstLoop = true;
             for (int i = column; i < 8; i++)
             {
                 Console.WriteLine("turnHorizontalRight: for i = " + i);
@@ -364,8 +405,13 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(row, i) == player)
                 {
-                    lastColumn = i;
-                    Console.WriteLine("turnHorizontalRight: lastColumn = " + lastColumn);
+                    if (!firstLoop)
+                    {
+                        lastColumn = i;
+                        Console.WriteLine("turnHorizontalRight: lastColumn = " + lastColumn);
+                        break;
+                    }
+                    firstLoop = false;
                 }
             }
             //The actual turning
@@ -376,7 +422,7 @@ namespace TestApplikation
             }
         }
 
-        private bool isMoveLegal(int row, int column)
+        public bool isMoveLegal(int row, int column)
         {
             bool moveIsLegal = true;
             if (board.getBoardPosition(row, column) != 0)
@@ -396,9 +442,9 @@ namespace TestApplikation
         private bool nextToOthers(int row, int column)
         {
             bool nextToOther = false;
-            int maxRow = row + 2;
+            int maxRow = row + 1;
             int minRow = row - 1;
-            int maxColumn = column + 2;
+            int maxColumn = column + 1;
             int minColumn = column - 1;
             Console.WriteLine("nextToOther: is starting");
 
@@ -424,10 +470,10 @@ namespace TestApplikation
                 Console.WriteLine("nextToOther: maxJ=j");
             }
 
-            for (int i = minRow; i < maxRow; i++)
+            for (int i = minRow; i <= maxRow; i++)
             {
                 Console.WriteLine("nextToOther: first loop");
-                for (int j = minColumn; j < maxColumn; j++)
+                for (int j = minColumn; j <= maxColumn; j++)
                 {
                     Console.WriteLine("nextToOther: second loop");
                     Console.WriteLine("nextToOther: i:" + i + " j:" + j);

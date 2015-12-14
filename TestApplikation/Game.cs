@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestApplikation
 {
@@ -30,11 +26,43 @@ namespace TestApplikation
             if(currentPlayer == player1)
             {
                 currentPlayer = player2;
+                if (currentPlayer._isAI)
+                {
+                    currentPlayer.doThings(this);
+                }
+                else
+                {
+                    currentPlayer.doThings(this);
+                }
             }
             else
             {
                 currentPlayer = player1;
+                if (currentPlayer._isAI)
+                {
+                    currentPlayer.doThings(this);
+                }
+                else
+                {
+                    currentPlayer.doThings(this);
+                }
             }
+        }
+
+        public String playerStringBuilder()
+        {
+            String color = "";
+            if(currentPlayer._color == 1)
+            {
+                color = "vit";
+            }
+            else if (currentPlayer._color == 2)
+            {
+                color = "svart";
+            }
+            String returnString = "Det är " + currentPlayer._name + " (" + color + ") tur att placera en bricka ";
+
+            return returnString;
         }
 
         public void setStartingPlayer(String colorStr)
