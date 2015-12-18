@@ -15,8 +15,8 @@ namespace TestApplikation
         public override void doThings(Game game)
         {
             Console.WriteLine(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
-            System.Threading.Thread.Sleep(1000);
-            //AILogic(game);
+            AILogic(game);
+            _tilesRemaining--;
         }
 
         private void AILogic(Game game)

@@ -15,6 +15,7 @@ namespace TestApplikation
         public override void doThings(Game game)
         {
             Console.WriteLine(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
+            _tilesRemaining--;
         }
     }
 }

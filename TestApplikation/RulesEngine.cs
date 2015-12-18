@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace TestApplikation
 {
@@ -89,9 +90,10 @@ namespace TestApplikation
             }
         }
 
-        public Boolean makeMove(int row, int column, int player)
+        public Action onRoundFinished { get; set; }
+
+        public async void makeMove(int row, int column, int player)
         {
-            Boolean doItAgain = false;
             if (isMoveLegal(row, column, player))
             {
                 turnTile(row, column, player);
@@ -101,27 +103,39 @@ namespace TestApplikation
                 {
                     winState();
                 }
-                doItAgain = true;
+                await Task.Delay(1000);
+                Action localOnChange = onRoundFinished;
+                if (localOnChange != null)
+                {
+                    localOnChange();
+                }
             }
             else
             {
                 Console.WriteLine("Sorry, you can not make that move!");
             }
-            return doItAgain;
         }
 
         private void turnTile(int row, int column, int player)
         {
+            int a = checkHorizontalLeft(row, column, player);
+            int b = checkHorizontalRight(row, column, player);
+            int c = checkVerticalUp(row, column, player);
+            int d = checkVerticalDown(row, column, player);
+            int e = checkTopLeft(row, column, player);
+            int f = checkTopRight(row, column, player);
+            int g = checkBotLeft(row, column, player);
+            int h = checkBotRight(row, column, player);
             //fungerar
-            turnHorizontalLeft(checkHorizontalLeft(row, column, player), player, row, column);
-            turnHorizontalRight(checkHorizontalRight(row, column, player), player,row,column);
-            turnVerticalUp(checkVerticalUp(row, column, player),player,row,column);
-            turnVerticalDown(checkVerticalDown(row, column, player),player,row,column);
+            turnHorizontalLeft(a, player, row, column);
+            turnHorizontalRight(b, player,row,column);
+            turnVerticalUp(c,player,row,column);
+            turnVerticalDown(d,player,row,column);
             //paj
-            turnTopLeft(checkTopLeft(row, column, player),player,row,column);
-            turnTopRight(checkTopRight(row, column, player),player,row,column);
-            turnBotLeft(checkBotLeft(row, column, player), player, row, column);
-            turnBotRight(checkBotRight(row, column, player),player,row,column);
+            turnTopLeft(e ,player,row,column);
+            turnTopRight(f ,player,row,column);
+            turnBotLeft(g , player, row, column);
+            turnBotRight(h ,player,row,column);
         }
 
         private int checkBotLeft(int row, int column, int player)
@@ -134,7 +148,6 @@ namespace TestApplikation
             {
                     if ((!(row == 7) && !(column == 0)) && board.getBoardPosition(row + 1, column - 1) == player)
                     {
-                    Console.WriteLine("Break1");
                         break;
                     }
                 
@@ -142,14 +155,12 @@ namespace TestApplikation
                 {
                     if (!firstLoop)
                     {
-                        Console.WriteLine("Break2");
                         break;
                     }
                     firstLoop = false;
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
-                    Console.WriteLine("Break3");
                     lastRow = i;
                     break;
                 }
@@ -158,7 +169,6 @@ namespace TestApplikation
                     currentColumn--;
                 }
             }
-            Console.WriteLine("RETURNING THIS VALUE " + lastRow);
             return lastRow;
         }
 
@@ -277,16 +287,14 @@ namespace TestApplikation
             //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
             int lastColumn = column;
-            int currentColumn = column;
             Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
-                    if ((!(row == 0) && !(column == 7)) && board.getBoardPosition(row - 1, column + 1) == player)
-                    {
+                if ((!(row == 0) && !(column == 7)) && board.getBoardPosition(row - 1, column + 1) == player)
+                {
                         break;
-                    
                 }
-                else if (board.getBoardPosition(i, currentColumn) == 0)
+                else if (board.getBoardPosition(i, column) == 0)
                 {
                     if (!firstLoop)
                     {
@@ -294,19 +302,16 @@ namespace TestApplikation
                     }
                     firstLoop = false;
                 }
-                else if (board.getBoardPosition(i, currentColumn) == player)
+                else if (board.getBoardPosition(i, column) == player)
                 {
                     lastRow = i;
-                    Console.WriteLine("Break3");
                     break;
                 }
-                if (currentColumn < 7)
+                if (column < 7)
                 {
-                    currentColumn++;
+                    column++;
                 }
             }
-
-            Console.WriteLine("DETTA VÄRDE RETURNERAS " + lastRow);
             return lastRow;
         }
 
@@ -343,8 +348,6 @@ namespace TestApplikation
                 }
                 else if (board.getBoardPosition(i, column) == player)
                 {
-
-                    Console.WriteLine("VERTICAL UP" + i);
                     lastRow = i;
                     break;
                 }
@@ -489,7 +492,6 @@ namespace TestApplikation
             else if(!(turningTile(row, column, player) > 0))
             {
                 moveIsLegal = false;
-                Console.WriteLine("Jonas förstör spelet");
             }
             return moveIsLegal;
         }

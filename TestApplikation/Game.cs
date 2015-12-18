@@ -19,34 +19,20 @@ namespace TestApplikation
         private void startingCurrentPlayer(PlayerAbstract startingPlayer)
         {
             currentPlayer = startingPlayer;
+                currentPlayer.doThings(this);
         }
 
-        private void changeCurrentPlayer()
+        public void changeCurrentPlayer()
         {
             if(currentPlayer == player1)
             {
                 currentPlayer = player2;
-                if (currentPlayer._isAI)
-                {
-                    currentPlayer.doThings(this);
-                }
-                else
-                {
-                    currentPlayer.doThings(this);
-                }
             }
             else
             {
                 currentPlayer = player1;
-                if (currentPlayer._isAI)
-                {
-                    currentPlayer.doThings(this);
-                }
-                else
-                {
-                    currentPlayer.doThings(this);
-                }
             }
+            currentPlayer.doThings(this);
         }
 
         public String playerStringBuilder()
@@ -71,25 +57,19 @@ namespace TestApplikation
             {
                 player1 = new Human("Fritjof", 1);
                 player2 = new AI(2);
-                startingCurrentPlayer(player1);
+                startingCurrentPlayer(player2);
             }
             else if (colorStr.Equals("dark"))
             {
                 player1 = new Human("Fritjof", 2);
                 player2 = new AI(1);
-                startingCurrentPlayer(player2);
+                startingCurrentPlayer(player1);
             }
         }
 
         public void initateMove(int row, int column)
         {
-            Boolean doItAgain = false;
-            Console.WriteLine("initateMove: row " + row + " column " + column);
-            doItAgain = rulesEngine.makeMove(row, column, currentPlayer._color);
-            if (doItAgain)
-            {
-                changeCurrentPlayer();
-            }
+            rulesEngine.makeMove(row, column, currentPlayer._color);
         }
     }
 }

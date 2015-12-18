@@ -16,6 +16,7 @@ namespace TestApplikation
             game = new Game(this, rulesEngine);
             initGame();
             rulesEngine._board.onBoardChange += onBoardChange;
+            rulesEngine.onRoundFinished += game.changeCurrentPlayer;
         }
 
         private void initGame()
