@@ -18,6 +18,8 @@ namespace TestApplikation
 
         public Action<int[]> onBoardChange { get; set; }
 
+        public Action<int[,]> onBoardChangeLINQ { get; set; }
+
         public void setBoardPosition(int row, int column, int player)
         {
             boardArray[row, column] = player;
@@ -27,6 +29,11 @@ namespace TestApplikation
             if (localOnChange != null)
             {
                 localOnChange(argArr);
+            }
+            Action<int[,]> localOnChangeLINQ = onBoardChangeLINQ;
+            if (localOnChangeLINQ != null)
+            {
+                localOnChangeLINQ(boardArray);
             }
         }
 

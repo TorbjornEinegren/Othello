@@ -66,6 +66,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Board.cs" />
+    <Compile Include="LINQ.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="PlayerAbstract.cs" />
