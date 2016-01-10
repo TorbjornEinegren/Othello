@@ -11,11 +11,18 @@ namespace TestApplikation
             this._color = color;
             this._isAI = false;
         }
-
+        
         public override void doThings(Game game)
         {
-            Console.WriteLine(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
-            _tilesRemaining--;
+            Action<String> localOnChange = onPlayerChange;
+            if (localOnChange != null)
+            {
+                localOnChange(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
+            }
+            if (_tilesRemaining > 0)
+            {
+                _tilesRemaining--;
+            }
         }
     }
 }

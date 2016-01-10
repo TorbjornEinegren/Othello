@@ -34,6 +34,8 @@ namespace TestApplikation
             }
         }
 
+        public Action<String> onPlayerChange { get; set; }
+
         public abstract void doThings(Game game);
 
         private int tilesRemaining;
