@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,6 +10,7 @@ namespace TestApplikation
     {
         private Game game;
         private RulesEngine rulesEngine;
+        string startupPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,8 +31,8 @@ namespace TestApplikation
         {
             Image darkImage = new Image();
             Image lightImage = new Image();
-            lightImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp") as ImageSource;
-            darkImage.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Dark.bmp") as ImageSource;
+            lightImage.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Light.bmp") as ImageSource;
+            darkImage.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Dark.bmp") as ImageSource;
 
             System.Windows.Controls.Button darkBtn = new Button();
             darkBtn.Name = "dark";
@@ -85,15 +87,15 @@ namespace TestApplikation
             int color = rulesEngine._board.getBoardPosition(row, column);
             if (color == 0)
             {
-                image.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Blank.bmp") as ImageSource;
+                image.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Blank.bmp") as ImageSource;
             }
             else if (color == 1)
             {
-                image.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Light.bmp") as ImageSource;
+                image.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Light.bmp") as ImageSource;
             }
             else if (color == 2)
             {
-                image.Source = (new ImageSourceConverter()).ConvertFromString("C:\\Users\\Yin\\Documents\\GitHub\\Othello\\TestApplikation\\Dark.bmp") as ImageSource;
+                image.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Dark.bmp") as ImageSource;
             }
             return image;
         }
