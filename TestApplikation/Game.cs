@@ -44,20 +44,54 @@ namespace TestApplikation
             allowMoves = true;
         }
         
-        public void setStartingColor(String colorStr)
+        public void setStartingColor(String colorStr, String playerStr)
         {
-            if (colorStr.Equals("light"))
+            if (playerStr.Equals("AI"))
             {
-                player1 = new Human ("Fritjof", 1);
-                player2 = new AI(2);
-                startingCurrentPlayer(player2);
+                if (colorStr.Equals("light"))
+                {
+                    player1 = new AI("Dator", 1);
+                    player2 = new AI("Dumburk", 2);
+                    startingCurrentPlayer(player2);
+                }
+                else if (colorStr.Equals("dark"))
+                {
+                    player1 = new AI("Dator", 2);
+                    player2 = new AI("Dumburk", 1);
+                    startingCurrentPlayer(player1);
+                }
             }
-            else if (colorStr.Equals("dark"))
+            else if (playerStr.Equals("Human"))
             {
-                player1 = new Human("Fritjof", 2);
-                player2 = new AI(1);
-                startingCurrentPlayer(player1);
+                if (colorStr.Equals("light"))
+                {
+                    player1 = new Human("Människa", 1);
+                    player2 = new Human("En annan människa", 2);
+                    startingCurrentPlayer(player2);
+                }
+                else if (colorStr.Equals("dark"))
+                {
+                    player1 = new Human("Människa", 2);
+                    player2 = new Human("En annan människa", 1);
+                    startingCurrentPlayer(player1);
+                }
             }
+            else
+            {
+                if (colorStr.Equals("light"))
+                {
+                    player1 = new Human("Människa", 1);
+                    player2 = new AI("Dumburk", 2);
+                    startingCurrentPlayer(player2);
+                }
+                else if (colorStr.Equals("dark"))
+                {
+                    player1 = new Human("Människa", 2);
+                    player2 = new AI("Dumburk", 1);
+                    startingCurrentPlayer(player1);
+                }
+            }
+
         }
 
         public void initateMove(int row, int column)

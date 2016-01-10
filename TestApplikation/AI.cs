@@ -4,9 +4,9 @@ namespace TestApplikation
 {
     class AI : PlayerAbstract
     {
-        public AI(int color)
+        public AI(String name, int color)
         {
-            this._name = "Dumburk";
+            this._name = name;
             this._tilesRemaining = 30;
             this._color = color;
             this._isAI = true;
