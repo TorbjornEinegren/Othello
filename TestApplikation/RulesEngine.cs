@@ -34,10 +34,10 @@ namespace TestApplikation
             //sets the starting positions for the players
             //0 is an empty spot, 1 is white and 2 is black
             board = new Board();
-            board.setBoardPosition(3, 3, 1);
-            board.setBoardPosition(3, 4, 2);
-            board.setBoardPosition(4, 3, 2);
-            board.setBoardPosition(4, 4, 1);
+            board.setBoardPosition(3, 3, 2);
+            board.setBoardPosition(3, 4, 1);
+            board.setBoardPosition(4, 3, 1);
+            board.setBoardPosition(4, 4, 2);
             //testvalues for turning tiles
             /*board.setBoardPosition(3, 3, 1);
             board.setBoardPosition(3, 4, 1);
@@ -92,6 +92,21 @@ namespace TestApplikation
 
         public Action onRoundFinished { get; set; }
 
+        public Action onMoveFinished { get; set; }
+
+        public Action<String> onBadMove { get; set; }
+
+        public async void forfeitRound()
+        {
+            moveCounter();
+            await Task.Delay(1000);
+            Action localOnChange = onRoundFinished;
+            if (localOnChange != null)
+            {
+                localOnChange();
+            }
+        }
+        
         public async void makeMove(int row, int column, int player)
         {
             if (isMoveLegal(row, column, player))
@@ -99,11 +114,7 @@ namespace TestApplikation
                 turnTile(row, column, player);
                 board.setBoardPosition(row, column, player);
                 moveCounter();
-                if (move >= 60)
-                {
-                    winState();
-                }
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 Action localOnChange = onRoundFinished;
                 if (localOnChange != null)
                 {
@@ -112,7 +123,20 @@ namespace TestApplikation
             }
             else
             {
-                Console.WriteLine("Sorry, you can not make that move!");
+                Action<String> localOnChange = onBadMove;
+                if (localOnChange != null)
+                {
+                    localOnChange("Sorry, you can't make that move");
+                }
+            }
+            Action localOnFinished = onMoveFinished;
+            if (localOnFinished != null)
+            {
+                localOnFinished();
+            }
+            if (move == 60)
+            {
+                winState();
             }
         }
 
@@ -128,14 +152,14 @@ namespace TestApplikation
             int h = checkBotRight(row, column, player);
             //fungerar
             turnHorizontalLeft(a, player, row, column);
-            turnHorizontalRight(b, player,row,column);
-            turnVerticalUp(c,player,row,column);
-            turnVerticalDown(d,player,row,column);
+            turnHorizontalRight(b, player, row, column);
+            turnVerticalUp(c, player, row, column);
+            turnVerticalDown(d, player, row, column);
             //paj
-            turnTopLeft(e ,player,row,column);
-            turnTopRight(f ,player,row,column);
-            turnBotLeft(g , player, row, column);
-            turnBotRight(h ,player,row,column);
+            turnTopLeft(e, player, row, column);
+            turnTopRight(f, player, row, column);
+            turnBotLeft(g, player, row, column);
+            turnBotRight(h, player, row, column);
         }
 
         private int checkBotLeft(int row, int column, int player)
@@ -146,18 +170,16 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
-                    if ((!(row == 7) && !(column == 0)) && board.getBoardPosition(row + 1, column - 1) == player)
-                    {
-                        break;
-                    }
-                
+                if ((!(row == 7) && !(column == 0)) && board.getBoardPosition(row + 1, column - 1) == player)
+                {
+                    break;
+                }
                 else if (board.getBoardPosition(i, currentColumn) == 0)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
@@ -168,6 +190,11 @@ namespace TestApplikation
                 {
                     currentColumn--;
                 }
+                else
+                {
+                    break;
+                }
+                firstLoop = false;
             }
             return lastRow;
         }
@@ -194,18 +221,17 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
-                    if ((!(row == 7) && !(column == 7)) && board.getBoardPosition(row + 1, column + 1) == player)
-                    {
-                        break;
-                    }
-                
+                if ((!(row == 7) && !(column == 7)) && board.getBoardPosition(row + 1, column + 1) == player)
+                {
+                    break;
+                }
+
                 else if (board.getBoardPosition(i, currentColumn) == 0)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
@@ -217,6 +243,11 @@ namespace TestApplikation
                 {
                     currentColumn++;
                 }
+                else
+                {
+                    break;
+                }
+                firstLoop = false;
             }
             return lastRow;
         }
@@ -243,17 +274,16 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
-                    if ((!(row == 0) && !(column == 0)) && board.getBoardPosition(row - 1, column - 1) == player)
-                    {
-                        break;
-                    }
+                if ((!(row == 0) && !(column == 0)) && board.getBoardPosition(row - 1, column - 1) == player)
+                {
+                    break;
+                }
                 else if (board.getBoardPosition(i, currentColumn) == 0)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(i, currentColumn) == player)
                 {
@@ -265,6 +295,11 @@ namespace TestApplikation
                 {
                     currentColumn--;
                 }
+                else
+                {
+                    break;
+                }
+                firstLoop = false;
             }
             return lastRow;
         }
@@ -292,7 +327,7 @@ namespace TestApplikation
             {
                 if ((!(row == 0) && !(column == 7)) && board.getBoardPosition(row - 1, column + 1) == player)
                 {
-                        break;
+                    break;
                 }
                 else if (board.getBoardPosition(i, column) == 0)
                 {
@@ -300,7 +335,6 @@ namespace TestApplikation
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(i, column) == player)
                 {
@@ -311,6 +345,11 @@ namespace TestApplikation
                 {
                     column++;
                 }
+                else
+                {
+                    break;
+                }
+                firstLoop = false;
             }
             return lastRow;
         }
@@ -335,22 +374,22 @@ namespace TestApplikation
             for (int i = row; i >= 0; i--)
             {
                 if (!(row == 0) && board.getBoardPosition(row - 1, column) == player)
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 else if (board.getBoardPosition(i, column) == 0)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(i, column) == player)
                 {
                     lastRow = i;
                     break;
                 }
+                firstLoop = false;
             }
             return lastRow;
         }
@@ -371,23 +410,23 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
-                    if (!(row == 7) && board.getBoardPosition(row + 1, column) == player)
-                    {
-                        break;
-                    }
-                    else if (board.getBoardPosition(i, column) == 0)
-                    {
-                        if (!firstLoop)
-                        {
-                            break;
-                        }
-                        firstLoop = false;
-                    }
-                    else if (board.getBoardPosition(i, column) == player)
-                    {
-                        lastRow = i;
-                        break;
+                if (!(row == 7) && board.getBoardPosition(row + 1, column) == player)
+                {
+                    break;
                 }
+                else if (board.getBoardPosition(i, column) == 0)
+                {
+                    if (!firstLoop)
+                    {
+                        break;
+                    }
+                }
+                else if (board.getBoardPosition(i, column) == player)
+                {
+                    lastRow = i;
+                    break;
+                }
+                firstLoop = false;
             }
 
             return lastRow;
@@ -409,24 +448,23 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = column; i >= 0; i--)
             {
-                    if ((!(column == 0)) && board.getBoardPosition(row, column - 1) == player)
-                    {
-                        break;
-                    }
-                
+                if ((!(column == 0)) && board.getBoardPosition(row, column - 1) == player)
+                {
+                    break;
+                }
                 else if (board.getBoardPosition(row, i) == 0)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(row, i) == player)
                 {
                     lastColumn = i;
                     break;
                 }
+                firstLoop = false;
             }
             return lastColumn;
         }
@@ -447,24 +485,23 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = column; i < 8; i++)
             {
-                    if ((!(column == 7)) && board.getBoardPosition(row, column + 1) == player)
-                    {
-                        break;
-                    }
-                
+                if ((!(column == 7)) && board.getBoardPosition(row, column + 1) == player)
+                {
+                    break;
+                }
                 else if (board.getBoardPosition(row, i) == 0)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
-                    firstLoop = false;
                 }
                 else if (board.getBoardPosition(row, i) == player)
                 {
                     lastColumn = i;
                     break;
                 }
+                firstLoop = false;
             }
             return lastColumn;
         }
@@ -489,7 +526,7 @@ namespace TestApplikation
             {
                 moveIsLegal = false;
             }
-            else if(!(turningTile(row, column, player) > 0))
+            else if (!(turningTile(row, column, player) > 0))
             {
                 moveIsLegal = false;
             }
@@ -499,7 +536,7 @@ namespace TestApplikation
         public int turningTile(int row, int column, int player)
         {
             int turnedTiles = 0;
-            turnedTiles += Math.Abs(checkBotLeft(row,column,player) - row);
+            turnedTiles += Math.Abs(checkBotLeft(row, column, player) - row);
             turnedTiles += Math.Abs(checkBotRight(row, column, player) - row);
             turnedTiles += Math.Abs(checkHorizontalLeft(row, column, player) - column);
             turnedTiles += Math.Abs(checkHorizontalRight(row, column, player) - column);

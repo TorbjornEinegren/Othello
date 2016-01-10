@@ -12,11 +12,19 @@ namespace TestApplikation
             this._isAI = true;
         }
 
-        public override void doThings(Game game)
+        public async override void doThings(Game game)
         {
-            Console.WriteLine(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
-            AILogic(game);
-            _tilesRemaining--;
+            await System.Threading.Tasks.Task.Delay(500);
+            Action<String> localOnChange = onPlayerChange;
+            if (localOnChange != null)
+            {
+                localOnChange(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
+            }
+            if (_tilesRemaining > 0)
+            {
+                _tilesRemaining--;
+                AILogic(game);
+            }
         }
 
         private void AILogic(Game game)
@@ -40,7 +48,14 @@ namespace TestApplikation
                     }
                 }
             }
-            game.initateMove(bestRow, bestColumn);
+            if (bestScore > 1)
+            {
+                game.initateMove(bestRow, bestColumn);
+            }
+            else
+            {
+                game.rulesEngine.forfeitRound();
+            }
         }
     }
 }

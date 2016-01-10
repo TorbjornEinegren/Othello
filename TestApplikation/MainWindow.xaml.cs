@@ -16,15 +16,11 @@ namespace TestApplikation
             InitializeComponent();
             rulesEngine = new RulesEngine();
             game = new Game(this, rulesEngine);
-            initGame();
+            chooseColor();
             rulesEngine._board.onBoardChange += onBoardChange;
             rulesEngine.onRoundFinished += game.changeCurrentPlayer;
-        }
-
-        private void initGame()
-        {
-            chooseColor();
-            //Gameboard is initialized through a click in colorClick()            
+            rulesEngine.onMoveFinished += game.allowMovesAgain;
+            rulesEngine.onBadMove += textChange;
         }
 
         private void chooseColor()
@@ -116,14 +112,16 @@ namespace TestApplikation
             Grid.SetRow(newBtn, row);
             Grid.SetColumn(newBtn, column);
             buttonGrid.Children.Add(newBtn);
+        }        public void textChange(String newText)
+        {
+            playerBox.Text = newText;
         }
         private void chooseColorClick(object sender, RoutedEventArgs e)
         {
             String colorStr = ((Button)sender).Name;
-            game.setStartingPlayer(colorStr);
+            game.setStartingColor(colorStr);
             initGameboard();
             playerBox.TextWrapping = TextWrapping.Wrap;
-            playerBox.Text = game.playerStringBuilder();
         }
 
         private void clickButton(object sender, RoutedEventArgs e)
@@ -132,7 +130,6 @@ namespace TestApplikation
             int column = Convert.ToInt32(((Button)sender).Name.Substring(3));
 
             game.initateMove(row, column);
-            playerBox.Text = game.playerStringBuilder();
         }
     }
 }
