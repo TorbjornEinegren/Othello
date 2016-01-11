@@ -1,0 +1,42 @@
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\bin\Debug\TestApplikation.exe.config
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\bin\Debug\TestApplikation.exe
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\bin\Debug\TestApplikation.pdb
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.csprojResolveAssemblyReference.cache
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\MainWindow.g.cs
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\App.g.cs
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.cache
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.lref
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\MainWindow.baml
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.g.resources
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.Properties.Resources.resources
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.csproj.GenerateResource.Cache
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.exe
+c:\users\yin\documents\visual studio 2015\Projects\TestApplikation\TestApplikation\obj\Debug\TestApplikation.pdb
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.exe.config
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.exe
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.pdb
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.exe
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.pdb
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\MainWindow.g.cs
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\App.g.cs
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.cache
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.lref
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\MainWindow.baml
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.g.resources
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.Properties.Resources.resources
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.csproj.GenerateResource.Cache
+C:\Users\Yin\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.csprojResolveAssemblyReference.cache
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.exe.config
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.exe
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.pdb
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.exe
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\bin\Debug\TestApplikation.pdb
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.csprojResolveAssemblyReference.cache
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\MainWindow.g.cs
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\App.g.cs
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.cache
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation_MarkupCompile.lref
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\MainWindow.baml
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.g.resources
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.Properties.Resources.resources
+C:\Users\Fritjof\Documents\GitHub\Othello\TestApplikation\obj\Debug\TestApplikation.csproj.GenerateResource.Cache

@@ -1,2 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Board row0="11111111" row1="11222221" row2="11111121" row3="11111221" row4="11211121" row5="12221111" row6="11112111" row7="22222222" />
+<Game>
+  <Board>
+    <piece row="0" column="0" player="0" />
+    <Player1>
+      <Type>true</Type>
+      <Color>2</Color>
+      <Name>Dator</Name>
+    </Player1>
+    <Player2>
+      <Type>true</Type>
+      <Color>1</Color>
+      <Name>Dumburk</Name>
+    </Player2>
+  </Board>
+</Game>

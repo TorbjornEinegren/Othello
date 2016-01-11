@@ -52,12 +52,14 @@ namespace TestApplikation
                 {
                     player1 = new AI("Dator", 1);
                     player2 = new AI("Dumburk", 2);
+                    rulesEngine.linq.createPlayers(player1, player2);
                     startingCurrentPlayer(player2);
                 }
                 else if (colorStr.Equals("dark"))
                 {
                     player1 = new AI("Dator", 2);
                     player2 = new AI("Dumburk", 1);
+                    rulesEngine.linq.createPlayers(player1, player2);
                     startingCurrentPlayer(player1);
                 }
             }
@@ -67,12 +69,14 @@ namespace TestApplikation
                 {
                     player1 = new Human("Människa", 1);
                     player2 = new Human("En annan människa", 2);
+                    rulesEngine.linq.createPlayers(player1, player2);
                     startingCurrentPlayer(player2);
                 }
                 else if (colorStr.Equals("dark"))
                 {
                     player1 = new Human("Människa", 2);
                     player2 = new Human("En annan människa", 1);
+                    rulesEngine.linq.createPlayers(player1, player2);
                     startingCurrentPlayer(player1);
                 }
             }
@@ -82,6 +86,7 @@ namespace TestApplikation
                 {
                     player1 = new Human("Människa", 1);
                     player2 = new AI("Dumburk", 2);
+                    rulesEngine.linq.createPlayers(player1, player2);
                     startingCurrentPlayer(player2);
                 }
                 else if (colorStr.Equals("dark"))

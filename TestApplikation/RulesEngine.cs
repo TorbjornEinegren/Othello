@@ -5,6 +5,7 @@ namespace TestApplikation
 {
     public class RulesEngine
     {
+        public LINQ linq;
         private Board board;
         public Board _board
         {
@@ -34,12 +35,12 @@ namespace TestApplikation
             //sets the starting positions for the players
             //0 is an empty spot, 1 is white and 2 is black
             board = new Board();
-            LINQ linq = new LINQ();
-            board.onBoardChangeLINQ += linq.boardChange;
+            linq = new LINQ();
             board.setBoardPosition(3, 3, 2);
             board.setBoardPosition(3, 4, 1);
             board.setBoardPosition(4, 3, 1);
             board.setBoardPosition(4, 4, 2);
+            board.onBoardChangeLINQ += linq.boardChange;
         }
 
         private void moveCounter()
