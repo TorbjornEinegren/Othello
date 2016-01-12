@@ -36,10 +36,10 @@ namespace TestApplikation
             //0 is an empty spot, 1 is white and 2 is black
             board = new Board();
             linq = new LINQ();
-            board.setBoardPosition(3, 3, 2);
-            board.setBoardPosition(3, 4, 1);
-            board.setBoardPosition(4, 3, 1);
-            board.setBoardPosition(4, 4, 2);
+            //board.setBoardPosition(3, 3, 2);
+            //board.setBoardPosition(3, 4, 1);
+            //board.setBoardPosition(4, 3, 1);
+            //board.setBoardPosition(4, 4, 2);
             board.onBoardChangeLINQ += linq.boardChange;
         }
 
@@ -101,6 +101,10 @@ namespace TestApplikation
                 board.setBoardPosition(row, column, player);
                 moveCounter();
                 await Task.Delay(500);
+                if (move == 60)
+                {
+                    winState();
+                }
                 Action localOnChange = onRoundFinished;
                 if (localOnChange != null)
                 {
@@ -119,10 +123,6 @@ namespace TestApplikation
             if (localOnFinished != null)
             {
                 localOnFinished();
-            }
-            if (move == 60)
-            {
-                winState();
             }
         }
 

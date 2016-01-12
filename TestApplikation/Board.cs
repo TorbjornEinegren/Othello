@@ -16,9 +16,20 @@ namespace TestApplikation
             return boardArray[row, column];
         }
 
+        public void loadBoard(int[,] loadedBoard)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    setBoardPosition(i, j, loadedBoard[i, j]);
+                }
+            }
+        }
+
         public Action<int[]> onBoardChange { get; set; }
 
-        public Action<int[,]> onBoardChangeLINQ { get; set; }
+        public Action<int[]> onBoardChangeLINQ { get; set; }
 
         public void setBoardPosition(int row, int column, int player)
         {
@@ -30,10 +41,12 @@ namespace TestApplikation
             {
                 localOnChange(argArr);
             }
-            Action<int[,]> localOnChangeLINQ = onBoardChangeLINQ;
+
+            int[] argArrLINQ = { row, column, player };
+            Action<int[]> localOnChangeLINQ = onBoardChangeLINQ;
             if (localOnChangeLINQ != null)
             {
-                localOnChangeLINQ(boardArray);
+                localOnChangeLINQ(argArrLINQ);
             }
         }
 

@@ -16,16 +16,17 @@ namespace TestApplikation
         private string playerStr;
         System.Windows.Controls.Button mixButton;
         string startupPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+
         public MainWindow()
         {
             InitializeComponent();
             rulesEngine = new RulesEngine();
             game = new Game(this, rulesEngine);
-            choosePlayers();
             rulesEngine._board.onBoardChange += onBoardChange;
             rulesEngine.onRoundFinished += game.changeCurrentPlayer;
             rulesEngine.onMoveFinished += game.allowMovesAgain;
             rulesEngine.onBadMove += textChange;
+            choosePlayers();
         }
 
         private void chooseColor()
@@ -71,7 +72,7 @@ namespace TestApplikation
 
         public void choosePlayers()
         {
-            System.Windows.Controls.Button aiButton = new Button();
+            Button aiButton = new Button();
             aiButton.Name = "AI";
             aiButton.Content = "AI\nAI";
             aiButton.Click += new RoutedEventHandler(choosePlayerClick);
@@ -79,7 +80,7 @@ namespace TestApplikation
             Grid.SetColumn(aiButton, 3);
             buttonGrid.Children.Add(aiButton);
 
-            System.Windows.Controls.Button humanButton = new Button();
+            Button humanButton = new Button();
             humanButton.Content = "Human\nHuman";
             humanButton.Name = "Human";
             humanButton.Click += new RoutedEventHandler(choosePlayerClick);
@@ -87,13 +88,21 @@ namespace TestApplikation
             Grid.SetColumn(humanButton, 4);
             buttonGrid.Children.Add(humanButton);
 
-            mixButton = new Button();
+            Button mixButton = new Button();
             mixButton.Name = "Mix";
             mixButton.Content = "Human\nAI";
             mixButton.Click += new RoutedEventHandler(choosePlayerClick);
             Grid.SetRow(mixButton, 3);
             Grid.SetColumn(mixButton, 5);
             buttonGrid.Children.Add(mixButton);
+
+            Button loadButton = new Button();
+            loadButton.Name = "Mix";
+            loadButton.Content = "Ladda \nspel";
+            loadButton.Click += new RoutedEventHandler(loadGameButton);
+            Grid.SetRow(loadButton, 4);
+            Grid.SetColumn(loadButton, 4);
+            buttonGrid.Children.Add(loadButton);
         }
 
         private void initGameboard()
@@ -169,6 +178,12 @@ namespace TestApplikation
         {
             playerStr = ((Button)sender).Name;
             chooseColor();
+        }
+
+        private void loadGameButton(object sender, RoutedEventArgs e)
+        {
+            initGameboard();
+            game.loadGame();
         }
 
         private void clickButton(object sender, RoutedEventArgs e)

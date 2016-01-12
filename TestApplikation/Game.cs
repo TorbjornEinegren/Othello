@@ -25,6 +25,26 @@ namespace TestApplikation
             currentPlayer.doThings(this);
         }
 
+        public void loadGame()
+        {
+            PlayerAbstract[] loadedPlayers = rulesEngine.linq.loadPlayers();
+
+            player1 = loadedPlayers[0];
+            player2 = loadedPlayers[1];
+
+            if (player1._tilesRemaining > player2._tilesRemaining)
+            {
+                currentPlayer = player2;
+            }
+            else
+            {
+                currentPlayer = player1;
+            }
+            rulesEngine._board.loadBoard(rulesEngine.linq.loadGame());
+
+            currentPlayer.doThings(this);
+        }
+
         public void changeCurrentPlayer()
         {
             if (currentPlayer == player1)
@@ -43,9 +63,10 @@ namespace TestApplikation
         {
             allowMoves = true;
         }
-        
+
         public void setStartingColor(String colorStr, String playerStr)
         {
+            rulesEngine.linq.initBoard();
             if (playerStr.Equals("AI"))
             {
                 if (colorStr.Equals("light"))
@@ -96,6 +117,8 @@ namespace TestApplikation
                     startingCurrentPlayer(player1);
                 }
             }
+            rulesEngine.linq.createPlayers(player1, player2);
+            rulesEngine._board.loadBoard(rulesEngine.linq.loadGame());
 
         }
 
