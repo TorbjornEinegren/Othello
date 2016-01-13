@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestApplikation"
         mc:Ignorable="d"
-        Title="Fönster" Height="440" Width="600">
+        Title="Othello" Height="440" Width="600">
     <Canvas Name="field">
         <Grid x:Name="buttonGrid" Height="400" Width="400">
             <Grid.RowDefinitions>
@@ -29,9 +29,17 @@
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <DockPanel Name="dockPanel" Canvas.Left="412" Width="180" Height="400">
-            <TextBlock Name="playerBox" Height="100" Width="180" DockPanel.Dock="Top"></TextBlock>
-            <TextBlock Name="informationBox" Height="300" Width="180" DockPanel.Dock="Bottom"></TextBlock>
-        </DockPanel>
+        <Grid Name="informationGrid" Canvas.Left="412" Width="180" Height="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="130"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Name="playerBox" Height="100" Width="140" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap"></TextBlock>
+            <Button Name="restartButton" Height="50" Width="140" Content="Restart game" Grid.Column="0" Grid.Row="2"></Button>
+        </Grid>
     </Canvas>
 </Window>

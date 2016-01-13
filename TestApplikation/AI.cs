@@ -5,7 +5,7 @@ namespace TestApplikation
 {
     class AI : PlayerAbstract
     {
-        public AI(String name, int color)
+        public AI(String name, String color)
         {
             this._name = name;
             this._tilesRemaining = 30;
@@ -16,16 +16,10 @@ namespace TestApplikation
         public async override void doThings(Game game)
         {
             await Task.Delay(100);
-            Action<String> localOnChange = onPlayerChange;
-            if (localOnChange != null)
-            {
-                localOnChange(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
-            }
+
             if (_tilesRemaining > 0)
             {
-                _tilesRemaining--;
                 AILogic(game);
-                game.rulesEngine.linq.updateTilesRemaining(this);
             }
         }
 
@@ -52,11 +46,12 @@ namespace TestApplikation
             }
             if (bestScore > 1)
             {
+                _tilesRemaining--;
+                game.rulesEngine.linq.updateTilesRemaining(this);
                 game.initateMove(bestRow, bestColumn);
             }
             else
             {
-                _tilesRemaining++;
                 game.rulesEngine.forfeitRound();
             }
         }

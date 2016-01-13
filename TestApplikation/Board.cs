@@ -4,49 +4,61 @@ namespace TestApplikation
 {
     public class Board
     {
-        int[,] boardArray;
+        private String[,] boardArray;
 
         public Board()
         {
-            boardArray = new int[8, 8];
+            boardArray = new String[8, 8];
         }
 
-        public int getBoardPosition(int row, int column)
+        public String getBoardPosition(int row, int column)
         {
             return boardArray[row, column];
         }
 
-        public void loadBoard(int[,] loadedBoard)
+        public void loadBoard(String[,] loadedBoard)
         {
+            boardArray = new String[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    setBoardPosition(i, j, loadedBoard[i, j]);
+                    if (loadedBoard[i, j] != null)
+                    {
+                        setBoardPosition(i, j, loadedBoard[i, j]);
+                    }
                 }
             }
         }
 
         public Action<int[]> onBoardChange { get; set; }
 
-        public Action<int[]> onBoardChangeLINQ { get; set; }
+        public Action<Object[]> onBoardChangeLINQ { get; set; }
+        
+        public Action allowMovesAgain { get; set; }
 
-        public void setBoardPosition(int row, int column, int player)
+        public void setBoardPosition(int row, int column, String playerColor)
         {
-            boardArray[row, column] = player;
-            int[] argArr = { row, column };
-            // notify Subscribers
+            boardArray[row, column] = playerColor;
+
+            int[] changedPosition = { row, column };
             Action<int[]> localOnChange = onBoardChange;
             if (localOnChange != null)
             {
-                localOnChange(argArr);
+                localOnChange(changedPosition);
             }
 
-            int[] argArrLINQ = { row, column, player };
-            Action<int[]> localOnChangeLINQ = onBoardChangeLINQ;
+            Object[] changedValueAndPosition = { row, column, playerColor };
+            Action<Object[]> localOnChangeLINQ = onBoardChangeLINQ;
             if (localOnChangeLINQ != null)
             {
-                localOnChangeLINQ(argArrLINQ);
+                localOnChangeLINQ(changedValueAndPosition);
+            }
+
+            Action allowMoves = allowMovesAgain;
+            if (allowMoves != null)
+            {
+                allowMoves();
             }
         }
 

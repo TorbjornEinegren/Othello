@@ -15,72 +15,88 @@ namespace TestApplikation
             }
         }
 
-        private int move;
-        public int _move
+        private int tilesRemaining;
+        public int _tilesRemaining
         {
             get
             {
-                return move;
+                return tilesRemaining;
             }
             set
             {
-                move = value;
+                tilesRemaining = value;
             }
         }
 
         public RulesEngine()
         {
-            //a counter to keep track of whos turn it is to play
-            move = 0;
-            //sets the starting positions for the players
-            //0 is an empty spot, 1 is white and 2 is black
+            _tilesRemaining = 60;
             board = new Board();
             linq = new LINQ();
-            //board.setBoardPosition(3, 3, 2);
-            //board.setBoardPosition(3, 4, 1);
-            //board.setBoardPosition(4, 3, 1);
-            //board.setBoardPosition(4, 4, 2);
             board.onBoardChangeLINQ += linq.boardChange;
         }
 
         private void moveCounter()
         {
-            move++;
+            _tilesRemaining--;
         }
 
         private void winState()
         {
+            Action<Boolean> winState = onWinState;
+            if (winState != null)
+            {
+                winState(true);
+            }
+
             int whiteScore = 0;
             int blackScore = 0;
             for (int row = 0; row < 8; row++)
             {
                 for (int column = 0; column < 8; column++)
                 {
-                    if (board.getBoardPosition(row, column) == 1)
+                    if ("White".Equals(board.getBoardPosition(row, column)))
                     {
                         whiteScore++;
                     }
-                    else
+                    else if ("Black".Equals(board.getBoardPosition(row, column)))
                     {
                         blackScore++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("This should rarely happen");
                     }
                 }
             }
             if (whiteScore > blackScore)
             {
-
+                Action<String> onWinState = onWin;
+                if (onWinState != null)
+                {
+                    onWinState("White won against Black with " + whiteScore + " tiles against " + blackScore);
+                }
             }
             else
             {
+                Action<String> onWinState = onWin;
+                if (onWinState != null)
+                {
+                    onWinState("Black won against White with " + blackScore + " tiles against " + whiteScore);
+                }
 
             }
         }
 
         public Action onRoundFinished { get; set; }
 
+        public Action<Boolean> onWinState { get; set; }
+
+        public Action<String> onWin { get; set; }
+
         public Action onMoveFinished { get; set; }
 
-        public Action<String> onBadMove { get; set; }
+        public Action<String> onMoveFeedback { get; set; }
 
         public void forfeitRound()
         {
@@ -91,16 +107,17 @@ namespace TestApplikation
                 localOnChange();
             }
         }
-        
-        public async void makeMove(int row, int column, int player)
+
+        public async void makeMove(int row, int column, PlayerAbstract currentPlayer)
         {
-            if (isMoveLegal(row, column, player))
+            String playerColor = currentPlayer._color;
+            if (isMoveLegal(row, column, playerColor))
             {
-                turnTile(row, column, player);
-                board.setBoardPosition(row, column, player);
+                turnTile(row, column, playerColor);
+                board.setBoardPosition(row, column, playerColor);
                 moveCounter();
                 await Task.Delay(90);
-                if (move == 60)
+                if (_tilesRemaining == 0)
                 {
                     winState();
                 }
@@ -112,10 +129,10 @@ namespace TestApplikation
             }
             else
             {
-                Action<String> localOnChange = onBadMove;
+                Action<String> localOnChange = onMoveFeedback;
                 if (localOnChange != null)
                 {
-                    localOnChange("Sorry, you can't make that move");
+                    localOnChange("You can't make that move");
                 }
             }
             Action localOnFinished = onMoveFinished;
@@ -125,29 +142,71 @@ namespace TestApplikation
             }
         }
 
-        private void turnTile(int row, int column, int player)
+        private void turnTile(int row, int column, String playerColor)
         {
-            int a = checkHorizontalLeft(row, column, player);
-            int b = checkHorizontalRight(row, column, player);
-            int c = checkVerticalUp(row, column, player);
-            int d = checkVerticalDown(row, column, player);
-            int e = checkTopLeft(row, column, player);
-            int f = checkTopRight(row, column, player);
-            int g = checkBotLeft(row, column, player);
-            int h = checkBotRight(row, column, player);
-            //fungerar
-            turnHorizontalLeft(a, player, row, column);
-            turnHorizontalRight(b, player, row, column);
-            turnVerticalUp(c, player, row, column);
-            turnVerticalDown(d, player, row, column);
-            //paj
-            turnTopLeft(e, player, row, column);
-            turnTopRight(f, player, row, column);
-            turnBotLeft(g, player, row, column);
-            turnBotRight(h, player, row, column);
+            int a = checkHorizontalLeft(row, column, playerColor);
+            int b = checkHorizontalRight(row, column, playerColor);
+            int c = checkVerticalUp(row, column, playerColor);
+            int d = checkVerticalDown(row, column, playerColor);
+            int e = checkTopLeft(row, column, playerColor);
+            int f = checkTopRight(row, column, playerColor);
+            int g = checkBotLeft(row, column, playerColor);
+            int h = checkBotRight(row, column, playerColor);
+            turnHorizontalLeft(a, playerColor, row, column);
+            turnHorizontalRight(b, playerColor, row, column);
+            turnVerticalUp(c, playerColor, row, column);
+            turnVerticalDown(d, playerColor, row, column);
+            turnTopLeft(e, playerColor, row, column);
+            turnTopRight(f, playerColor, row, column);
+            turnBotLeft(g, playerColor, row, column);
+            turnBotRight(h, playerColor, row, column);
         }
 
-        private int checkBotLeft(int row, int column, int player)
+        private int checkBotLeft(int row, int column, String playerColor)
+        {
+            int lastRow = row;
+            int currentColumn = column;
+            Boolean firstLoop = true;
+            for (int i = row; i < 8; i++)
+            {
+                if (board.getBoardPosition(i, currentColumn) == null)
+                {
+                    if (!firstLoop)
+                    {
+                        break;
+                    }
+                }
+                else if (board.getBoardPosition(i, currentColumn).Equals(playerColor))
+                {
+                    lastRow = i;
+                    break;
+                }
+                if (currentColumn == 0 || i == 7)
+                {
+                    break;
+                }
+                else
+                {
+                    currentColumn--;
+                }
+                firstLoop = false;
+            }
+            return lastRow;
+        }
+
+        private void turnBotLeft(int lastRow, String playerColor, int row, int currentColumn)
+        {
+            for (int i = row; i < lastRow; i++)
+            {
+                board.setBoardPosition(i, currentColumn, playerColor);
+                if (currentColumn > 0)
+                {
+                    currentColumn--;
+                }
+            }
+        }
+
+        private int checkBotRight(int row, int column, String playerColor)
         {
             //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
@@ -155,94 +214,36 @@ namespace TestApplikation
             Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
-                if ((!(row == 7) && !(column == 0)) && board.getBoardPosition(row + 1, column - 1) == player)
-                {
-                    break;
-                }
-                else if (board.getBoardPosition(i, currentColumn) == 0)
+                if (board.getBoardPosition(i, currentColumn) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(i, currentColumn) == player)
+                else if (board.getBoardPosition(i, currentColumn).Equals(playerColor))
                 {
                     lastRow = i;
                     break;
                 }
-                if (currentColumn > 0)
+                if (currentColumn == 7 || i == 7)
                 {
-                    currentColumn--;
+                    break;
                 }
                 else
-                {
-                    break;
-                }
-                firstLoop = false;
-            }
-            return lastRow;
-        }
-
-        private void turnBotLeft(int lastRow, int player, int row, int currentColumn)
-        {
-            //The actual turning
-            for (int i = row; i < lastRow; i++)
-            {
-                board.setBoardPosition(i, currentColumn, player);
-                if (currentColumn > 0)
-                {
-                    currentColumn--;
-                }
-            }
-        }
-
-        private int checkBotRight(int row, int column, int player)
-        {
-            //finds the last tile of the same player and turns the ones in between
-            int lastRow = row;
-            int lastColumn = column;
-            int currentColumn = column;
-            Boolean firstLoop = true;
-            for (int i = row; i < 8; i++)
-            {
-                if ((!(row == 7) && !(column == 7)) && board.getBoardPosition(row + 1, column + 1) == player)
-                {
-                    break;
-                }
-
-                else if (board.getBoardPosition(i, currentColumn) == 0)
-                {
-                    if (!firstLoop)
-                    {
-                        break;
-                    }
-                }
-                else if (board.getBoardPosition(i, currentColumn) == player)
-                {
-                    lastRow = i;
-                    lastColumn = currentColumn;
-                    break;
-                }
-                if (currentColumn < 7)
                 {
                     currentColumn++;
                 }
-                else
-                {
-                    break;
-                }
                 firstLoop = false;
             }
             return lastRow;
         }
 
-        private void turnBotRight(int lastRow, int player, int row, int currentColumn)
+        private void turnBotRight(int lastRow, String playerColor, int row, int currentColumn)
         {
-            //The actual turning
             for (int i = row; i < lastRow; i++)
             {
-                board.setBoardPosition(i, currentColumn, player);
+                board.setBoardPosition(i, currentColumn, playerColor);
                 if (currentColumn < 7)
                 {
                     currentColumn++;
@@ -250,51 +251,44 @@ namespace TestApplikation
             }
         }
 
-        private int checkTopLeft(int row, int column, int player)
+        private int checkTopLeft(int row, int column, String playerColor)
         {
-            //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
-            int lastColumn = column;
             int currentColumn = column;
             Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
-                if ((!(row == 0) && !(column == 0)) && board.getBoardPosition(row - 1, column - 1) == player)
-                {
-                    break;
-                }
-                else if (board.getBoardPosition(i, currentColumn) == 0)
+                if (board.getBoardPosition(i, currentColumn) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(i, currentColumn) == player)
+                else if (board.getBoardPosition(i, currentColumn).Equals(playerColor))
                 {
                     lastRow = i;
-                    lastColumn = currentColumn;
                     break;
                 }
-                if (currentColumn > 0)
+                if (currentColumn == 0 || i == 0)
                 {
-                    currentColumn--;
+                    break;
                 }
                 else
                 {
-                    break;
+                    currentColumn--;
                 }
                 firstLoop = false;
             }
             return lastRow;
         }
 
-        private void turnTopLeft(int lastRow, int player, int row, int currentColumn)
+        private void turnTopLeft(int lastRow, String playerColor, int row, int currentColumn)
         {
             //The actual turning
             for (int i = row; i > lastRow; i--)
             {
-                board.setBoardPosition(i, currentColumn, player);
+                board.setBoardPosition(i, currentColumn, playerColor);
                 if (currentColumn > 0)
                 {
                     currentColumn--;
@@ -302,48 +296,43 @@ namespace TestApplikation
             }
         }
 
-        private int checkTopRight(int row, int column, int player)
+        private int checkTopRight(int row, int column, String playerColor)
         {
-            //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
-            int lastColumn = column;
+            int currentColumn = column;
             Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
-                if ((!(row == 0) && !(column == 7)) && board.getBoardPosition(row - 1, column + 1) == player)
-                {
-                    break;
-                }
-                else if (board.getBoardPosition(i, column) == 0)
+                if (board.getBoardPosition(i, currentColumn) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(i, column) == player)
+                else if (board.getBoardPosition(i, currentColumn).Equals(playerColor))
                 {
                     lastRow = i;
                     break;
                 }
-                if (column < 7)
+                if (currentColumn == 7 || i == 0)
                 {
-                    column++;
+                    break;
                 }
                 else
                 {
-                    break;
+                    currentColumn++;
                 }
                 firstLoop = false;
             }
             return lastRow;
         }
 
-        private void turnTopRight(int lastRow, int player, int row, int currentColumn)
+        private void turnTopRight(int lastRow, String playerColor, int row, int currentColumn)
         {
             for (int i = row; i > lastRow; i--)
             {
-                board.setBoardPosition(i, currentColumn, player);
+                board.setBoardPosition(i, currentColumn, playerColor);
                 if (currentColumn < 7)
                 {
                     currentColumn++;
@@ -351,25 +340,25 @@ namespace TestApplikation
             }
         }
 
-        private int checkVerticalUp(int row, int column, int player)
+        private int checkVerticalUp(int row, int column, String playerColor)
         {
             //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
             Boolean firstLoop = true;
             for (int i = row; i >= 0; i--)
             {
-                if (!(row == 0) && board.getBoardPosition(row - 1, column) == player)
+                if (!(row == 0) && playerColor.Equals(board.getBoardPosition(row - 1, column)))
                 {
                     break;
                 }
-                else if (board.getBoardPosition(i, column) == 0)
+                else if (board.getBoardPosition(i, column) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(i, column) == player)
+                else if (board.getBoardPosition(i, column).Equals(playerColor))
                 {
                     lastRow = i;
                     break;
@@ -379,34 +368,33 @@ namespace TestApplikation
             return lastRow;
         }
 
-        private void turnVerticalUp(int lastRow, int player, int row, int column)
+        private void turnVerticalUp(int lastRow, String playerColor, int row, int column)
         {
             //The actual turning
             for (int j = row; j > lastRow; j--)
             {
-                board.setBoardPosition(j, column, player);
+                board.setBoardPosition(j, column, playerColor);
             }
         }
 
-        private int checkVerticalDown(int row, int column, int player)
+        private int checkVerticalDown(int row, int column, String playerColor)
         {
-            //finds the last tile of the same player and turns the ones in between
             int lastRow = row;
             Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
-                if (!(row == 7) && board.getBoardPosition(row + 1, column) == player)
+                if (!(row == 7) && playerColor.Equals(board.getBoardPosition(row + 1, column)))
                 {
                     break;
                 }
-                else if (board.getBoardPosition(i, column) == 0)
+                else if (board.getBoardPosition(i, column) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(i, column) == player)
+                else if (board.getBoardPosition(i, column).Equals(playerColor))
                 {
                     lastRow = i;
                     break;
@@ -417,34 +405,34 @@ namespace TestApplikation
             return lastRow;
         }
 
-        private void turnVerticalDown(int lastRow, int player, int row, int column)
+        private void turnVerticalDown(int lastRow, String playerColor, int row, int column)
         {
             //The actual turning
             for (int j = row; j <= lastRow; j++)
             {
-                board.setBoardPosition(j, column, player);
+                board.setBoardPosition(j, column, playerColor);
             }
         }
 
-        private int checkHorizontalLeft(int row, int column, int player)
+        private int checkHorizontalLeft(int row, int column, String playerColor)
         {
             //finds the last tile of the same player and turns the ones in between
             int lastColumn = column;
             Boolean firstLoop = true;
             for (int i = column; i >= 0; i--)
             {
-                if ((!(column == 0)) && board.getBoardPosition(row, column - 1) == player)
+                if ((!(column == 0)) && playerColor.Equals(board.getBoardPosition(row, column - 1)))
                 {
                     break;
                 }
-                else if (board.getBoardPosition(row, i) == 0)
+                else if (board.getBoardPosition(row, i) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(row, i) == player)
+                else if (board.getBoardPosition(row, i).Equals(playerColor))
                 {
                     lastColumn = i;
                     break;
@@ -454,34 +442,34 @@ namespace TestApplikation
             return lastColumn;
         }
 
-        private void turnHorizontalLeft(int lastColumn, int player, int row, int column)
+        private void turnHorizontalLeft(int lastColumn, String playerColor, int row, int column)
         {
             //The actual turning
             for (int j = column; j > lastColumn; j--)
             {
-                board.setBoardPosition(row, j, player);
+                board.setBoardPosition(row, j, playerColor);
             }
         }
 
-        private int checkHorizontalRight(int row, int column, int player)
+        private int checkHorizontalRight(int row, int column, String playerColor)
         {
             //finds the last tile of the same player and turns the ones in between
             int lastColumn = column;
             Boolean firstLoop = true;
             for (int i = column; i < 8; i++)
             {
-                if ((!(column == 7)) && board.getBoardPosition(row, column + 1) == player)
+                if ((!(column == 7)) && playerColor.Equals(board.getBoardPosition(row, column + 1)))
                 {
                     break;
                 }
-                else if (board.getBoardPosition(row, i) == 0)
+                else if (board.getBoardPosition(row, i) == null)
                 {
                     if (!firstLoop)
                     {
                         break;
                     }
                 }
-                else if (board.getBoardPosition(row, i) == player)
+                else if (board.getBoardPosition(row, i).Equals(playerColor))
                 {
                     lastColumn = i;
                     break;
@@ -491,19 +479,19 @@ namespace TestApplikation
             return lastColumn;
         }
 
-        private void turnHorizontalRight(int lastColumn, int player, int row, int column)
+        private void turnHorizontalRight(int lastColumn, String playerColor, int row, int column)
         {
             //The actual turning
             for (int j = column; j < lastColumn; j++)
             {
-                board.setBoardPosition(row, j, player);
+                board.setBoardPosition(row, j, playerColor);
             }
         }
 
-        public bool isMoveLegal(int row, int column, int player)
+        public bool isMoveLegal(int row, int column, String playerColor)
         {
             bool moveIsLegal = true;
-            if (board.getBoardPosition(row, column) != 0)
+            if (board.getBoardPosition(row, column) != null)
             {
                 moveIsLegal = false;
             }
@@ -511,24 +499,24 @@ namespace TestApplikation
             {
                 moveIsLegal = false;
             }
-            else if (!(turningTile(row, column, player) > 0))
+            else if (!(turningTile(row, column, playerColor) > 1))
             {
                 moveIsLegal = false;
             }
             return moveIsLegal;
         }
 
-        public int turningTile(int row, int column, int player)
+        public int turningTile(int row, int column, String playerColor)
         {
             int turnedTiles = 0;
-            turnedTiles += Math.Abs(checkBotLeft(row, column, player) - row);
-            turnedTiles += Math.Abs(checkBotRight(row, column, player) - row);
-            turnedTiles += Math.Abs(checkHorizontalLeft(row, column, player) - column);
-            turnedTiles += Math.Abs(checkHorizontalRight(row, column, player) - column);
-            turnedTiles += Math.Abs(checkTopLeft(row, column, player) - row);
-            turnedTiles += Math.Abs(checkTopRight(row, column, player) - row);
-            turnedTiles += Math.Abs(checkVerticalDown(row, column, player) - row);
-            turnedTiles += Math.Abs(checkVerticalUp(row, column, player) - row);
+            turnedTiles += Math.Abs(checkBotLeft(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkBotRight(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkHorizontalLeft(row, column, playerColor) - column);
+            turnedTiles += Math.Abs(checkHorizontalRight(row, column, playerColor) - column);
+            turnedTiles += Math.Abs(checkTopLeft(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkTopRight(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkVerticalDown(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkVerticalUp(row, column, playerColor) - row);
             return turnedTiles;
         }
 
@@ -562,7 +550,7 @@ namespace TestApplikation
             {
                 for (int j = minColumn; j <= maxColumn; j++)
                 {
-                    if (board.getBoardPosition(i, j) != 0)
+                    if (board.getBoardPosition(i, j) != null)
                     {
                         nextToOther = true;
                     }

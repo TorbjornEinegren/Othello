@@ -4,7 +4,7 @@ namespace TestApplikation
 {
     public class Human : PlayerAbstract
     {
-        public Human(String name, int color)
+        public Human(String name, String color)
         {
             this._name = name;
             this._tilesRemaining = 30;
@@ -14,11 +14,6 @@ namespace TestApplikation
         
         public override void doThings(Game game)
         {
-            Action<String> localOnChange = onPlayerChange;
-            if (localOnChange != null)
-            {
-                localOnChange(_name + " spelar nu och har " + _tilesRemaining + " brickor kvar");
-            }
             if (_tilesRemaining > 0)
             {
                 _tilesRemaining--;

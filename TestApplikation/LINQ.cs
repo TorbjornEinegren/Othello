@@ -21,9 +21,9 @@ namespace TestApplikation
         public void updateTilesRemaining(PlayerAbstract currentPlayer)
         {
             IEnumerable<XElement> piece = from pieces in xdoc.Descendants("Player")
-                                          where (int.Parse(pieces.Attribute("Color").Value) == currentPlayer._color)
+                                          where pieces.Attribute("Color").Value.Equals(currentPlayer._color)
                                           select pieces;
-            
+
             foreach (XElement itemElement in piece)
             {
                 itemElement.SetAttributeValue("TilesRemaining", currentPlayer._tilesRemaining);
@@ -52,6 +52,8 @@ namespace TestApplikation
         {
             xdoc.Descendants("Players").Descendants().Remove();
             xdoc.Descendants("Board").Descendants().Remove();
+
+            xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
         public void initBoard()
@@ -62,35 +64,35 @@ namespace TestApplikation
                 new XElement("piece",
                 new XAttribute("row", 3),
                 new XAttribute("column", 3),
-                new XAttribute("color", 1)));
+                new XAttribute("color", "Black")));
             xdoc.Root.Element("Board").Add(
                 new XElement("piece",
                 new XAttribute("row", 3),
                 new XAttribute("column", 4),
-                new XAttribute("color", 2)));
+                new XAttribute("color", "White")));
             xdoc.Root.Element("Board").Add(
                 new XElement("piece",
                 new XAttribute("row", 4),
                 new XAttribute("column", 3),
-                new XAttribute("color", 2)));
+                new XAttribute("color", "White")));
             xdoc.Root.Element("Board").Add(
                 new XElement("piece",
                 new XAttribute("row", 4),
                 new XAttribute("column", 4),
-                new XAttribute("color", 1)));
+                new XAttribute("color", "Black")));
 
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
-        public void boardChange(int[] data)
+        public void boardChange(Object[] data)
         {
-            if (data[2] == 1 || data[2] == 2)
+            if (data[2].ToString().Equals("Black") || data[2].ToString().Equals("White"))
             {
                 if (xdoc.Root.Element("Board").HasElements)
                 {
                     IEnumerable<XElement> piece = from pieces in xdoc.Descendants("piece")
-                                                  where (int.Parse(pieces.Attribute("row").Value) == data[0]
-                                                  && int.Parse(pieces.Attribute("column").Value) == data[1])
+                                                  where (int.Parse(pieces.Attribute("row").Value) == (int)data[0]
+                                                  && int.Parse(pieces.Attribute("column").Value) == (int)data[1])
                                                   select pieces;
 
                     bool exist = true;
@@ -114,9 +116,9 @@ namespace TestApplikation
             }
         }
 
-        public int[,] loadGame()
+        public String[,] loadGame()
         {
-            int[,] loadedGameBoard = new int[8, 8];
+            String[,] loadedGameBoard = new String[8, 8];
 
             List<XElement> tempList = new List<XElement>();
 
@@ -126,8 +128,7 @@ namespace TestApplikation
             {
                 int row = int.Parse(tempList[i].Attribute("row").Value);
                 int column = int.Parse(tempList[i].Attribute("column").Value);
-
-                loadedGameBoard[row, column] = int.Parse(tempList[i].Attribute("color").Value);
+                loadedGameBoard[row, column] = tempList[i].Attribute("color").Value;
             }
             return loadedGameBoard;
         }
@@ -147,13 +148,13 @@ namespace TestApplikation
                 if (bool.Parse(tempElement.Attribute("isAI").Value))
                 {
                     players[i] = new AI(tempElement.Attribute("Name").Value.ToString(),
-                    int.Parse(tempElement.Attribute("Color").Value));
+                    tempElement.Attribute("Color").Value);
                     players[i]._tilesRemaining = int.Parse(tempElement.Attribute("TilesRemaining").Value);
                 }
                 else
                 {
                     players[i] = new Human(tempElement.Attribute("Name").Value.ToString(),
-                    int.Parse(tempElement.Attribute("Color").Value));
+                    tempElement.Attribute("Color").Value);
                     players[i]._tilesRemaining = int.Parse(tempElement.Attribute("TilesRemaining").Value);
                 }
             }

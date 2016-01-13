@@ -8,8 +8,8 @@ namespace TestApplikation
 {
     public abstract class PlayerAbstract
     {
-        private int color;
-        public int _color
+        private String color;
+        public String _color
         {
             get
             {
@@ -33,9 +33,7 @@ namespace TestApplikation
                 isAI = value;
             }
         }
-
-        public Action<String> onPlayerChange { get; set; }
-
+        
         public abstract void doThings(Game game);
 
         private int tilesRemaining;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,11 +23,15 @@ namespace TestApplikation
         {
             InitializeComponent();
             rulesEngine = new RulesEngine();
-            game = new Game(this, rulesEngine);
+            game = new Game(rulesEngine);
             rulesEngine._board.onBoardChange += onBoardChange;
             rulesEngine.onRoundFinished += game.changeCurrentPlayer;
             rulesEngine.onMoveFinished += game.allowMovesAgain;
-            rulesEngine.onBadMove += textChange;
+            rulesEngine.onMoveFeedback += textChange;
+            restartButton.Click += new RoutedEventHandler(restartGame);
+            game.playerChange += textChange;
+            game.rulesEngine.onWin += textChange;
+            game.rulesEngine.onWinState += game.setWinState;
             choosePlayers();
         }
 
@@ -132,16 +137,16 @@ namespace TestApplikation
         private Image changeColor(int row, int column)
         {
             Image image = new Image();
-            int color = rulesEngine._board.getBoardPosition(row, column);
-            if (color == 0)
+            String color = rulesEngine._board.getBoardPosition(row, column);
+            if (color == null)
             {
                 image.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Blank.bmp") as ImageSource;
             }
-            else if (color == 1)
+            else if (color.Equals("White"))
             {
                 image.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Light.bmp") as ImageSource;
             }
-            else if (color == 2)
+            else if (color.Equals("Black"))
             {
                 image.Source = (new ImageSourceConverter()).ConvertFromString(startupPath + "\\Dark.bmp") as ImageSource;
             }
@@ -173,7 +178,14 @@ namespace TestApplikation
             String colorStr = ((Button)sender).Name;
             game.setStartingColor(colorStr, playerStr);
             initGameboard();
-            playerBox.TextWrapping = TextWrapping.Wrap;
+        }
+
+        private void restartGame(object sender, RoutedEventArgs e)
+        {
+            textChange("");
+            game.restartGame();
+            buttonGrid.Children.Clear();
+            choosePlayers();
         }
 
         private void choosePlayerClick(object sender, RoutedEventArgs e)
@@ -197,31 +209,3 @@ namespace TestApplikation
         }
     }
 }
-
-//public void printBox(TextBlock TextBlock1)
-//{
-//    String stringtest = "";
-//    int inttest;
-//    for (int row = 0; row < 8; row++)
-//    {
-//        if (row == 0)
-//        {
-//            stringtest = stringtest + "     A   B  C   D  E   F   G   H\n";
-//        }
-//        for (int column = 0; column < 8; column++)
-//        {
-//            if (column == 0)
-//            {
-//                stringtest = stringtest + (row + 1) + "   ";
-//            }
-//            if (column < 8)
-//            {
-//                inttest = rulesEngine._board.getBoardPosition(row, column);
-//                stringtest = stringtest + inttest.ToString();
-//                stringtest = stringtest + "   ";
-//            }
-//        }
-//        stringtest = stringtest + "\n";
-//    }
-//    TextBlock1.Text = stringtest;
-//}
