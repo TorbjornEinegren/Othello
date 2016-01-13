@@ -15,6 +15,7 @@ namespace TestApplikation
         private RulesEngine rulesEngine;
         private string playerStr;
         System.Windows.Controls.Button mixButton;
+        System.Windows.Controls.Button loadButton;
         string startupPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
 
         public MainWindow()
@@ -32,6 +33,7 @@ namespace TestApplikation
         private void chooseColor()
         {
             buttonGrid.Children.Remove(mixButton);
+            buttonGrid.Children.Remove(loadButton);
             if (playerStr.Equals("AI"))
             {
                 game.setStartingColor("dark", playerStr);
@@ -88,7 +90,7 @@ namespace TestApplikation
             Grid.SetColumn(humanButton, 4);
             buttonGrid.Children.Add(humanButton);
 
-            Button mixButton = new Button();
+            mixButton = new Button();
             mixButton.Name = "Mix";
             mixButton.Content = "Human\nAI";
             mixButton.Click += new RoutedEventHandler(choosePlayerClick);
@@ -96,7 +98,7 @@ namespace TestApplikation
             Grid.SetColumn(mixButton, 5);
             buttonGrid.Children.Add(mixButton);
 
-            Button loadButton = new Button();
+            loadButton = new Button();
             loadButton.Name = "Mix";
             loadButton.Content = "Ladda \nspel";
             loadButton.Click += new RoutedEventHandler(loadGameButton);

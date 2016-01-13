@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace TestApplikation
@@ -16,18 +17,33 @@ namespace TestApplikation
         {
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
+
+        public void updateTilesRemaining(PlayerAbstract currentPlayer)
+        {
+            IEnumerable<XElement> piece = from pieces in xdoc.Descendants("Player")
+                                          where (int.Parse(pieces.Attribute("Color").Value) == currentPlayer._color)
+                                          select pieces;
+            
+            foreach (XElement itemElement in piece)
+            {
+                itemElement.SetAttributeValue("TilesRemaining", currentPlayer._tilesRemaining);
+            }
+        }
+
         public void createPlayers(PlayerAbstract player1, PlayerAbstract player2)
         {
             if (!(xdoc.Root.Element("Players").HasElements))
             {
-                xdoc.Root.Element("Players").Add(new XElement("Player1",
+                xdoc.Root.Element("Players").Add(new XElement("Player",
                 new XAttribute("isAI", player1._isAI),
                 new XAttribute("Color", player1._color),
-                new XAttribute("Name", player1._name)));
-                xdoc.Root.Element("Players").Add(new XElement("Player2",
+                new XAttribute("Name", player1._name),
+                new XAttribute("TilesRemaining", player1._tilesRemaining)));
+                xdoc.Root.Element("Players").Add(new XElement("Player",
                 new XAttribute("isAI", player2._isAI),
                 new XAttribute("Color", player2._color),
-                new XAttribute("Name", player2._name)));
+                new XAttribute("Name", player2._name),
+                new XAttribute("TilesRemaining", player2._tilesRemaining)));
             }
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
@@ -127,15 +143,18 @@ namespace TestApplikation
 
             for (int i = 0; i < 2; i++)
             {
-                if (bool.Parse(tempList[i].Attribute("isAI").Value))
+                XElement tempElement = tempList[i];
+                if (bool.Parse(tempElement.Attribute("isAI").Value))
                 {
-                    players[i] = new AI(tempList[i].Attribute("Name").Value.ToString(),
-                        int.Parse(tempList[i].Attribute("Color").Value));
+                    players[i] = new AI(tempElement.Attribute("Name").Value.ToString(),
+                    int.Parse(tempElement.Attribute("Color").Value));
+                    players[i]._tilesRemaining = int.Parse(tempElement.Attribute("TilesRemaining").Value);
                 }
                 else
                 {
-                    players[i] = new Human(tempList[i].Attribute("Name").Value.ToString(),
-                    int.Parse(tempList[i].Attribute("Color").Value));
+                    players[i] = new Human(tempElement.Attribute("Name").Value.ToString(),
+                    int.Parse(tempElement.Attribute("Color").Value));
+                    players[i]._tilesRemaining = int.Parse(tempElement.Attribute("TilesRemaining").Value);
                 }
             }
             return players;

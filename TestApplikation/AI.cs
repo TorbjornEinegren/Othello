@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace TestApplikation
 {
@@ -14,7 +15,7 @@ namespace TestApplikation
 
         public async override void doThings(Game game)
         {
-            await System.Threading.Tasks.Task.Delay(500);
+            await Task.Delay(100);
             Action<String> localOnChange = onPlayerChange;
             if (localOnChange != null)
             {
@@ -24,6 +25,7 @@ namespace TestApplikation
             {
                 _tilesRemaining--;
                 AILogic(game);
+                game.rulesEngine.linq.updateTilesRemaining(this);
             }
         }
 
@@ -54,6 +56,7 @@ namespace TestApplikation
             }
             else
             {
+                _tilesRemaining++;
                 game.rulesEngine.forfeitRound();
             }
         }

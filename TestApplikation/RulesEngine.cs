@@ -82,10 +82,9 @@ namespace TestApplikation
 
         public Action<String> onBadMove { get; set; }
 
-        public async void forfeitRound()
+        public void forfeitRound()
         {
             moveCounter();
-            await Task.Delay(1000);
             Action localOnChange = onRoundFinished;
             if (localOnChange != null)
             {
@@ -100,7 +99,7 @@ namespace TestApplikation
                 turnTile(row, column, player);
                 board.setBoardPosition(row, column, player);
                 moveCounter();
-                await Task.Delay(500);
+                await Task.Delay(90);
                 if (move == 60)
                 {
                     winState();

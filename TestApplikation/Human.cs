@@ -23,6 +23,7 @@ namespace TestApplikation
             {
                 _tilesRemaining--;
             }
+            game.rulesEngine.linq.updateTilesRemaining(this);
         }
     }
 }
