@@ -23,6 +23,8 @@ namespace TestApplikation
 
         public void updateTilesRemaining(PlayerAbstract currentPlayer)
         {
+            currentPlayer.updateTiles();
+
             IEnumerable<XElement> piece = from pieces in xdoc.Descendants("Player")
                                           where pieces.Attribute("Color").Value.Equals(currentPlayer._color)
                                           select pieces;
@@ -33,6 +35,10 @@ namespace TestApplikation
             }
 
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+
+            var ints = from str in xdoc.Elements("Player")
+                       where str.Attribute("Color").Value.Equals(currentPlayer._color)
+                       select str.Attribute("TilesRemaining");
         }
 
         public Object[] updatedXML()
@@ -48,14 +54,14 @@ namespace TestApplikation
                     {
                         if (fromXMLArray[i, j] != comparisonArray[i, j])
                         {
-                            if (comparisonArray[i, j] != null || differenceCounter > 2)
+                            if (comparisonArray[i, j] != null || differenceCounter > 1)
                             {
                                 removeTile(i, j);
                             }
                             else
                             {
-                                if ((rulesEngine._tilesRemaining % 2 == 0 && "Black".Equals(fromXMLArray[i, j]))
-                                    || (rulesEngine._tilesRemaining % 2 != 0 && "White".Equals(fromXMLArray[i, j])))
+                                if ((rulesEngine.roundsLeft % 2 == 0 && "Black".Equals(fromXMLArray[i, j]))
+                                    || (rulesEngine.roundsLeft % 2 != 0 && "White".Equals(fromXMLArray[i, j])))
                                 {
                                     if (rulesEngine.isMoveLegal(i, j, fromXMLArray[i, j]))
                                     {
@@ -65,10 +71,6 @@ namespace TestApplikation
                                             changedPositionArray[0] = i;
                                             changedPositionArray[1] = j;
                                             changedPositionArray[2] = fromXMLArray[i, j];
-                                        }
-                                        else
-                                        {
-                                            removeTile(i, j);
                                         }
                                     }
                                     else
@@ -85,16 +87,15 @@ namespace TestApplikation
                     }
                     else if (comparisonArray[i, j] != null)
                     {
-
+                        Object[] tempArray = new Object[3];
+                        tempArray[0] = i;
+                        tempArray[1] = j;
+                        tempArray[2] = comparisonArray[i, j];
+                        boardChange(tempArray);
                     }
                 }
             }
             return changedPositionArray;
-        }
-
-        private void returnTile()
-        {
-
         }
 
         private void removeTile(int i, int j)

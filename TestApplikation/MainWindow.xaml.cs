@@ -14,6 +14,7 @@ namespace TestApplikation
         System.Windows.Controls.Button mixButton;
         System.Windows.Controls.Button loadButton;
         string startupPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+        bool aiMatch = false;
 
         public MainWindow()
         {
@@ -37,6 +38,7 @@ namespace TestApplikation
             buttonGrid.Children.Remove(loadButton);
             if (playerStr.Equals("AI"))
             {
+                aiMatch = true;
                 game.setStartingColor("dark", playerStr);
                 initGameboard();
             }
@@ -198,10 +200,13 @@ namespace TestApplikation
 
         private void clickButton(object sender, RoutedEventArgs e)
         {
-            int row = Convert.ToInt32(((Button)sender).Name.Substring(1, 1));
-            int column = Convert.ToInt32(((Button)sender).Name.Substring(3));
+            if (!(aiMatch))
+            {
+                int row = Convert.ToInt32(((Button)sender).Name.Substring(1, 1));
+                int column = Convert.ToInt32(((Button)sender).Name.Substring(3));
 
-            game.initateMove(row, column);
+                game.initateMove(row, column);
+            }
         }
     }
 }

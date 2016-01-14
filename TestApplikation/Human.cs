@@ -14,11 +14,6 @@ namespace TestApplikation
         
         public override void doThings(Game game)
         {
-            if (_tilesRemaining > 0)
-            {
-                _tilesRemaining--;
-            }
-            game.rulesEngine.linq.updateTilesRemaining(this);
         }
     }
 }

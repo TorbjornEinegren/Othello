@@ -46,8 +46,6 @@ namespace TestApplikation
             }
             if (bestScore > 1)
             {
-                _tilesRemaining--;
-                game.rulesEngine.linq.updateTilesRemaining(this);
                 game.initateMove(bestRow, bestColumn);
             }
             else

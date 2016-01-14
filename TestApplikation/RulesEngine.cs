@@ -16,7 +16,7 @@ namespace TestApplikation
         }
 
         private int tilesRemaining;
-        public int _tilesRemaining
+        public int roundsLeft
         {
             get
             {
@@ -30,7 +30,7 @@ namespace TestApplikation
 
         public RulesEngine()
         {
-            _tilesRemaining = 60;
+            roundsLeft = 60;
             board = new Board();
             linq = new LINQ(this);
             board.onBoardChangeLINQ += linq.boardChange;
@@ -38,7 +38,7 @@ namespace TestApplikation
 
         private void moveCounter()
         {
-            _tilesRemaining--;
+            roundsLeft--;
         }
 
         private void winState()
@@ -102,7 +102,7 @@ namespace TestApplikation
         {
             moveCounter();
 
-            if (_tilesRemaining == 0)
+            if (roundsLeft == 0)
             {
                 winState();
             }
@@ -114,8 +114,8 @@ namespace TestApplikation
             }
         }
 
-        public void hasXMLUpdated(int row, int column, PlayerAbstract currentPlayer)
-        {
+        public void playMade(int row, int column, PlayerAbstract currentPlayer)
+        {   
             Object[] changedPositionArray = linq.updatedXML();
 
             if (changedPositionArray[2] == null)
@@ -123,6 +123,7 @@ namespace TestApplikation
                 String playerColor = currentPlayer._color;
                 if (isMoveLegal(row, column, playerColor))
                 {
+                    linq.updateTilesRemaining(currentPlayer);
                     makeMove(row, column, playerColor);
                 }
                 else
@@ -136,6 +137,7 @@ namespace TestApplikation
             }
             else
             {
+                linq.updateTilesRemaining(currentPlayer);
                 makeMove((int)changedPositionArray[0], (int)changedPositionArray[1], (String)changedPositionArray[2]);
             }
             Action localOnFinished = onMoveFinished;
@@ -151,7 +153,7 @@ namespace TestApplikation
             board.setBoardPosition(i, j, playerColor);
             moveCounter();
             await Task.Delay(90);
-            if (_tilesRemaining == 0)
+            if (roundsLeft == 0)
             {
                 winState();
             }

@@ -36,6 +36,11 @@ namespace TestApplikation
         
         public abstract void doThings(Game game);
 
+        public void updateTiles()
+        {
+            _tilesRemaining--;
+        }
+
         private int tilesRemaining;
         public int _tilesRemaining
         {

@@ -52,7 +52,8 @@ namespace TestApplikation
                 currentPlayer = player1;
             }
             rulesEngine._board.loadBoard(rulesEngine.linq.loadGame());
-            rulesEngine._tilesRemaining = rulesEngine._tilesRemaining - player1._tilesRemaining - player2._tilesRemaining; Action<String> onPlayerChange = playerChange;
+            rulesEngine.roundsLeft = rulesEngine.roundsLeft - player1._tilesRemaining - player2._tilesRemaining;
+            Action<String> onPlayerChange = playerChange;
             if (onPlayerChange != null)
             {
                 onPlayerChange(currentPlayer._name + " spelar nu och har "
@@ -65,6 +66,7 @@ namespace TestApplikation
 
         public void changeCurrentPlayer()
         {
+
             if (gameEnded == false)
             {
                 if (currentPlayer == player1)
@@ -97,7 +99,7 @@ namespace TestApplikation
             gameEnded = true;
             rulesEngine.linq.gameEnd();
             rulesEngine.linq.initBoard();
-            rulesEngine._tilesRemaining = 60;
+            rulesEngine.roundsLeft = 60;
         }
 
         public void setStartingColor(String colorStr, String playerStr)
@@ -154,10 +156,10 @@ namespace TestApplikation
         {
             if (gameEnded == false)
             {
-                if (allowMoves && rulesEngine._tilesRemaining <= 60)
+                if (allowMoves && rulesEngine.roundsLeft <= 60)
                 {
                     allowMoves = false;
-                    rulesEngine.hasXMLUpdated(row, column, currentPlayer);
+                    rulesEngine.playMade(row, column, currentPlayer);
                 }
             }
         }
