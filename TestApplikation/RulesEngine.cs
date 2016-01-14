@@ -32,7 +32,7 @@ namespace TestApplikation
         {
             _tilesRemaining = 60;
             board = new Board();
-            linq = new LINQ();
+            linq = new LINQ(this);
             board.onBoardChangeLINQ += linq.boardChange;
         }
 
@@ -101,6 +101,12 @@ namespace TestApplikation
         public void forfeitRound()
         {
             moveCounter();
+
+            if (_tilesRemaining == 0)
+            {
+                winState();
+            }
+
             Action localOnChange = onRoundFinished;
             if (localOnChange != null)
             {
@@ -108,37 +114,51 @@ namespace TestApplikation
             }
         }
 
-        public async void makeMove(int row, int column, PlayerAbstract currentPlayer)
+        public void hasXMLUpdated(int row, int column, PlayerAbstract currentPlayer)
         {
-            String playerColor = currentPlayer._color;
-            if (isMoveLegal(row, column, playerColor))
+            Object[] changedPositionArray = linq.updatedXML();
+
+            if (changedPositionArray[2] == null)
             {
-                turnTile(row, column, playerColor);
-                board.setBoardPosition(row, column, playerColor);
-                moveCounter();
-                await Task.Delay(90);
-                if (_tilesRemaining == 0)
+                String playerColor = currentPlayer._color;
+                if (isMoveLegal(row, column, playerColor))
                 {
-                    winState();
+                    makeMove(row, column, playerColor);
                 }
-                Action localOnChange = onRoundFinished;
-                if (localOnChange != null)
+                else
                 {
-                    localOnChange();
+                    Action<String> localOnChange = onMoveFeedback;
+                    if (localOnChange != null)
+                    {
+                        localOnChange("You can't make that move");
+                    }
                 }
             }
             else
             {
-                Action<String> localOnChange = onMoveFeedback;
-                if (localOnChange != null)
-                {
-                    localOnChange("You can't make that move");
-                }
+                makeMove((int)changedPositionArray[0], (int)changedPositionArray[1], (String)changedPositionArray[2]);
             }
             Action localOnFinished = onMoveFinished;
             if (localOnFinished != null)
             {
                 localOnFinished();
+            }
+        }
+
+        private async void makeMove(int i, int j, String playerColor)
+        {
+            turnTile(i, j, playerColor);
+            board.setBoardPosition(i, j, playerColor);
+            moveCounter();
+            await Task.Delay(90);
+            if (_tilesRemaining == 0)
+            {
+                winState();
+            }
+            Action localOnChange = onRoundFinished;
+            if (localOnChange != null)
+            {
+                localOnChange();
             }
         }
 
@@ -164,11 +184,16 @@ namespace TestApplikation
 
         private int checkBotLeft(int row, int column, String playerColor)
         {
+            if (!(row == 7 || column == 0) && playerColor.Equals(board.getBoardPosition(row + 1, column - 1)))
+            {
+                return row;
+            }
             int lastRow = row;
             int currentColumn = column;
             Boolean firstLoop = true;
             for (int i = row; i < 8; i++)
             {
+
                 if (board.getBoardPosition(i, currentColumn) == null)
                 {
                     if (!firstLoop)
@@ -208,7 +233,10 @@ namespace TestApplikation
 
         private int checkBotRight(int row, int column, String playerColor)
         {
-            //finds the last tile of the same player and turns the ones in between
+            if (!(row == 7 || column == 7) && playerColor.Equals(board.getBoardPosition(row + 1, column + 1)))
+            {
+                return row;
+            }
             int lastRow = row;
             int currentColumn = column;
             Boolean firstLoop = true;
@@ -253,6 +281,10 @@ namespace TestApplikation
 
         private int checkTopLeft(int row, int column, String playerColor)
         {
+            if (!(row == 0 || column == 0) && playerColor.Equals(board.getBoardPosition(row - 1, column - 1)))
+            {
+                return row;
+            }
             int lastRow = row;
             int currentColumn = column;
             Boolean firstLoop = true;
@@ -298,6 +330,10 @@ namespace TestApplikation
 
         private int checkTopRight(int row, int column, String playerColor)
         {
+            if (!(row == 0 || column == 7) && playerColor.Equals(board.getBoardPosition(row - 1, column + 1)))
+            {
+                return row;
+            }
             int lastRow = row;
             int currentColumn = column;
             Boolean firstLoop = true;

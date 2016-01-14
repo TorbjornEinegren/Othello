@@ -11,10 +11,13 @@ namespace TestApplikation
 {
     public class LINQ
     {
-        XDocument xdoc;
+        private XDocument xdoc;
+        private String[,] comparisonArray = new String[8, 8];
+        private RulesEngine rulesEngine;
 
-        public LINQ()
+        public LINQ(RulesEngine rulesEngine)
         {
+            this.rulesEngine = rulesEngine;
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
@@ -28,6 +31,80 @@ namespace TestApplikation
             {
                 itemElement.SetAttributeValue("TilesRemaining", currentPlayer._tilesRemaining);
             }
+
+            xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+        }
+
+        public Object[] updatedXML()
+        {
+            String[,] fromXMLArray = loadGame();
+            int differenceCounter = 0;
+            Object[] changedPositionArray = new Object[3];
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (fromXMLArray[i, j] != null)
+                    {
+                        if (fromXMLArray[i, j] != comparisonArray[i, j])
+                        {
+                            if (comparisonArray[i, j] != null || differenceCounter > 2)
+                            {
+                                removeTile(i, j);
+                            }
+                            else
+                            {
+                                if ((rulesEngine._tilesRemaining % 2 == 0 && "Black".Equals(fromXMLArray[i, j]))
+                                    || (rulesEngine._tilesRemaining % 2 != 0 && "White".Equals(fromXMLArray[i, j])))
+                                {
+                                    if (rulesEngine.isMoveLegal(i, j, fromXMLArray[i, j]))
+                                    {
+                                        differenceCounter++;
+                                        if (differenceCounter == 1)
+                                        {
+                                            changedPositionArray[0] = i;
+                                            changedPositionArray[1] = j;
+                                            changedPositionArray[2] = fromXMLArray[i, j];
+                                        }
+                                        else
+                                        {
+                                            removeTile(i, j);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        removeTile(i, j);
+                                    }
+                                }
+                                else
+                                {
+                                    removeTile(i, j);
+                                }
+                            }
+                        }
+                    }
+                    else if (comparisonArray[i, j] != null)
+                    {
+
+                    }
+                }
+            }
+            return changedPositionArray;
+        }
+
+        private void returnTile()
+        {
+
+        }
+
+        private void removeTile(int i, int j)
+        {
+            var xElement = (from el in xdoc.Descendants("piece")
+                            where int.Parse(el.Attribute("row").Value).Equals(i)
+                            && int.Parse(el.Attribute("column").Value).Equals(j)
+                            select el);
+            xElement.Remove();
+            xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
         public void createPlayers(PlayerAbstract player1, PlayerAbstract player2)
@@ -88,6 +165,8 @@ namespace TestApplikation
         {
             if (data[2].ToString().Equals("Black") || data[2].ToString().Equals("White"))
             {
+                comparisonArray[(int)data[0], (int)data[1]] = (String)data[2];
+
                 if (xdoc.Root.Element("Board").HasElements)
                 {
                     IEnumerable<XElement> piece = from pieces in xdoc.Descendants("piece")
@@ -118,6 +197,8 @@ namespace TestApplikation
 
         public String[,] loadGame()
         {
+            xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+
             String[,] loadedGameBoard = new String[8, 8];
 
             List<XElement> tempList = new List<XElement>();

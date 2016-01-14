@@ -157,7 +157,7 @@ namespace TestApplikation
                 if (allowMoves && rulesEngine._tilesRemaining <= 60)
                 {
                     allowMoves = false;
-                    rulesEngine.makeMove(row, column, currentPlayer);
+                    rulesEngine.hasXMLUpdated(row, column, currentPlayer);
                 }
             }
         }

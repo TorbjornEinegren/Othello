@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
-//Ett undantag från originalreglerna, att man står över ett kast och turen går till motståndaren om man inte kan lägga en bricka.
-//Skulle bli massor med extrajobb då en tur skulle gå, men en bricka inte skulle placeras, speltiden skulle förlängas och i slutet skulle spelaren med extra brickor lägga alla sina på rad.
 
 namespace TestApplikation
 {
