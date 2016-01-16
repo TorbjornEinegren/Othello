@@ -36,13 +36,7 @@ namespace TestApplikation
                 {
                     if (loadedBoard[i, j] != null)
                     {
-                        _boardArray[i, j] = loadedBoard[i, j];
-                        int[] changedPosition = { i, j };
-                        Action<int[]> localOnChange = onBoardChange;
-                        if (localOnChange != null)
-                        {
-                            localOnChange(changedPosition);
-                        }
+                        setBoardPosition(i, j, loadedBoard[i, j]);
                     }
                 }
             }

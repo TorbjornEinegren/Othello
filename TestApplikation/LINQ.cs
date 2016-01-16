@@ -20,25 +20,25 @@ namespace TestApplikation
         {
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
             this.rulesEngine = rulesEngine;
-            watcher = new FileSystemWatcher(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName);
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Filter = "board.xml";
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
+            //watcher = new FileSystemWatcher(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName);
+            //watcher.NotifyFilter = NotifyFilters.LastWrite;
+            //watcher.Filter = "board.xml";
+            //watcher.Changed += new FileSystemEventHandler(OnChanged);
+            //watcher.EnableRaisingEvents = true;
         }
 
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            try
-            {
-                watcher.EnableRaisingEvents = false;
-                rulesEngine._board.loadBoard(loadGame());
-            }
-            finally
-            {
-                watcher.EnableRaisingEvents = true;
-            }
-        }
+        //private void OnChanged(object source, FileSystemEventArgs e)
+        //{
+        //    try
+        //    {
+        //        watcher.EnableRaisingEvents = false;
+        //        rulesEngine._board.loadBoard(loadGame());
+        //    }
+        //    finally
+        //    {
+        //        watcher.EnableRaisingEvents = true;
+        //    }
+        //}
 
         public void updateTilesRemaining(PlayerAbstract currentPlayer)
         {
