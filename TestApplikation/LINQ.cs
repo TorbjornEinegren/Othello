@@ -21,6 +21,11 @@ namespace TestApplikation
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
+        private void onFileChanged(object sender, FileSystemEventArgs e)
+        {
+            rulesEngine._board._boardArray = loadGame();
+        }
+
         public void updateTilesRemaining(PlayerAbstract currentPlayer)
         {
             currentPlayer.updateTiles();
@@ -40,7 +45,7 @@ namespace TestApplikation
                        where str.Attribute("Color").Value.Equals(currentPlayer._color)
                        select str.Attribute("TilesRemaining");
         }
-
+        /*
         public Object[] updatedXML()
         {
             String[,] fromXMLArray = loadGame();
@@ -97,7 +102,7 @@ namespace TestApplikation
             }
             return changedPositionArray;
         }
-
+        */
         private void removeTile(int i, int j)
         {
             var xElement = (from el in xdoc.Descendants("piece")
@@ -130,6 +135,7 @@ namespace TestApplikation
         {
             xdoc.Descendants("Players").Descendants().Remove();
             xdoc.Descendants("Board").Descendants().Remove();
+            xdoc.Descendants("TurnsLeft").Remove();
 
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
@@ -158,42 +164,66 @@ namespace TestApplikation
                 new XAttribute("row", 4),
                 new XAttribute("column", 4),
                 new XAttribute("color", "Black")));
+            xdoc.Root.Add(
+                 new XElement("TurnsLeft",
+                 new XAttribute("Turns", 60)));
 
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
-        public void boardChange(Object[] data)
+        public void boardChange(String[,] data)
         {
-            if (data[2].ToString().Equals("Black") || data[2].ToString().Equals("White"))
+            xdoc.Descendants("Board").Descendants().Remove();
+
+            for (int i = 0; i < 8; i++)
             {
-                comparisonArray[(int)data[0], (int)data[1]] = (String)data[2];
-
-                if (xdoc.Root.Element("Board").HasElements)
+                for (int j = 0; j < 8; j++)
                 {
-                    IEnumerable<XElement> piece = from pieces in xdoc.Descendants("piece")
-                                                  where (int.Parse(pieces.Attribute("row").Value) == (int)data[0]
-                                                  && int.Parse(pieces.Attribute("column").Value) == (int)data[1])
-                                                  select pieces;
-
-                    bool exist = true;
-                    foreach (XElement itemElement in piece)
-                    {
-                        itemElement.SetAttributeValue("color", data[2]);
-                        exist = false;
-                    }
-
-                    if (exist)
+                    if (data[i, j] != null)
                     {
                         xdoc.Root.Element("Board").Add(
-                                new XElement("piece",
-                                new XAttribute("row", data[0]),
-                                new XAttribute("column", data[1]),
-                                new XAttribute("color", data[2])));
+                                    new XElement("piece",
+                                    new XAttribute("row", i),
+                                    new XAttribute("column", j),
+                                    new XAttribute("color", data[i, j])));
                     }
                 }
-
-                xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
             }
+            int oldTurnsLeft = int.Parse(xdoc.Root.Element("TurnsLeft").Attribute("Turns").Value);
+            xdoc.Root.Element("TurnsLeft").SetAttributeValue("Turns", oldTurnsLeft - 1);
+
+            xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+
+            //if (data[2].ToString().Equals("Black") || data[2].ToString().Equals("White"))
+            //{
+            //    comparisonArray[(int)data[0], (int)data[1]] = (String)data[2];
+
+            //    if (xdoc.Root.Element("Board").HasElements)
+            //    {
+            //        IEnumerable<XElement> piece = from pieces in xdoc.Descendants("piece")
+            //                                      where (int.Parse(pieces.Attribute("row").Value) == (int)data[0]
+            //                                      && int.Parse(pieces.Attribute("column").Value) == (int)data[1])
+            //                                      select pieces;
+
+            //        bool exist = true;
+            //        foreach (XElement itemElement in piece)
+            //        {
+            //            itemElement.SetAttributeValue("color", data[2]);
+            //            exist = false;
+            //        }
+
+            //        if (exist)
+            //        {
+            //            xdoc.Root.Element("Board").Add(
+            //                    new XElement("piece",
+            //                    new XAttribute("row", data[0]),
+            //                    new XAttribute("column", data[1]),
+            //                    new XAttribute("color", data[2])));
+            //        }
+            //    }
+
+            //    xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+            //}
         }
 
         public String[,] loadGame()
@@ -241,6 +271,11 @@ namespace TestApplikation
                 }
             }
             return players;
+        }
+
+        public int loadTurnsRemaining()
+        {
+            return int.Parse(xdoc.Root.Element("TurnsLeft").Attribute("Turns").Value);
         }
     }
 }

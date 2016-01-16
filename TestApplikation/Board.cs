@@ -5,6 +5,17 @@ namespace TestApplikation
     public class Board
     {
         private String[,] boardArray;
+        public String[,] _boardArray
+        {
+            get
+            {
+                return boardArray;
+            }
+            set
+            {
+                boardArray = value;
+            }
+        }
 
         public Board()
         {
@@ -33,8 +44,6 @@ namespace TestApplikation
 
         public Action<int[]> onBoardChange { get; set; }
 
-        public Action<Object[]> onBoardChangeLINQ { get; set; }
-        
         public Action allowMovesAgain { get; set; }
 
         public void setBoardPosition(int row, int column, String playerColor)
@@ -47,14 +56,6 @@ namespace TestApplikation
             {
                 localOnChange(changedPosition);
             }
-
-            Object[] changedValueAndPosition = { row, column, playerColor };
-            Action<Object[]> localOnChangeLINQ = onBoardChangeLINQ;
-            if (localOnChangeLINQ != null)
-            {
-                localOnChangeLINQ(changedValueAndPosition);
-            }
-
             Action allowMoves = allowMovesAgain;
             if (allowMoves != null)
             {

@@ -39,7 +39,6 @@ namespace TestApplikation
         public void loadGame()
         {
             PlayerAbstract[] loadedPlayers = rulesEngine.linq.loadPlayers();
-            Console.WriteLine(loadedPlayers.Length);
             player1 = loadedPlayers[0];
             player2 = loadedPlayers[1];
 
@@ -52,7 +51,7 @@ namespace TestApplikation
                 currentPlayer = player1;
             }
             rulesEngine._board.loadBoard(rulesEngine.linq.loadGame());
-            rulesEngine.roundsLeft = rulesEngine.roundsLeft - player1._tilesRemaining - player2._tilesRemaining;
+            rulesEngine.roundsLeft = rulesEngine.linq.loadTurnsRemaining();
             Action<String> onPlayerChange = playerChange;
             if (onPlayerChange != null)
             {

@@ -33,7 +33,7 @@ namespace TestApplikation
             roundsLeft = 60;
             board = new Board();
             linq = new LINQ(this);
-            board.onBoardChangeLINQ += linq.boardChange;
+            onBoardChanged += linq.boardChange;
         }
 
         private void moveCounter()
@@ -90,6 +90,8 @@ namespace TestApplikation
 
         public Action onRoundFinished { get; set; }
 
+        public Action<String[,]> onBoardChanged { get; set; }
+
         public Action<Boolean> onWinState { get; set; }
 
         public Action<String> onWin { get; set; }
@@ -106,7 +108,11 @@ namespace TestApplikation
             {
                 winState();
             }
-
+            Action<String[,]> onBoardChangedLINQ = onBoardChanged;
+            if (onBoardChangedLINQ != null)
+            {
+                onBoardChanged(_board._boardArray);
+            }
             Action localOnChange = onRoundFinished;
             if (localOnChange != null)
             {
@@ -115,30 +121,26 @@ namespace TestApplikation
         }
 
         public void playMade(int row, int column, PlayerAbstract currentPlayer)
-        {   
-            Object[] changedPositionArray = linq.updatedXML();
-
-            if (changedPositionArray[2] == null)
+        {
+            String playerColor = currentPlayer._color;
+            if (isMoveLegal(row, column, playerColor))
             {
-                String playerColor = currentPlayer._color;
-                if (isMoveLegal(row, column, playerColor))
+                linq.updateTilesRemaining(currentPlayer);
+                makeMove(row, column, playerColor);
+
+                Action<String[,]> onBoardChangedLINQ = onBoardChanged;
+                if (onBoardChangedLINQ != null)
                 {
-                    linq.updateTilesRemaining(currentPlayer);
-                    makeMove(row, column, playerColor);
-                }
-                else
-                {
-                    Action<String> localOnChange = onMoveFeedback;
-                    if (localOnChange != null)
-                    {
-                        localOnChange("You can't make that move");
-                    }
+                    onBoardChanged(_board._boardArray);
                 }
             }
             else
             {
-                linq.updateTilesRemaining(currentPlayer);
-                makeMove((int)changedPositionArray[0], (int)changedPositionArray[1], (String)changedPositionArray[2]);
+                Action<String> localOnChange = onMoveFeedback;
+                if (localOnChange != null)
+                {
+                    localOnChange("You can't make that move");
+                }
             }
             Action localOnFinished = onMoveFinished;
             if (localOnFinished != null)

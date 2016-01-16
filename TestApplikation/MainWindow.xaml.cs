@@ -183,6 +183,7 @@ namespace TestApplikation
             textChange("");
             game.restartGame();
             buttonGrid.Children.Clear();
+            aiMatch = false;
             choosePlayers();
         }
 

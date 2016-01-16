@@ -1,15 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Game>
   <Board>
-    <piece row="3" column="3" color="Black" />
-    <piece row="3" column="4" color="White" />
-    <piece row="4" column="3" color="Black" />
+    <piece row="0" column="1" color="White" />
+    <piece row="0" column="2" color="White" />
+    <piece row="0" column="3" color="White" />
+    <piece row="0" column="4" color="White" />
+    <piece row="0" column="5" color="White" />
+    <piece row="0" column="6" color="White" />
+    <piece row="0" column="7" color="White" />
+    <piece row="1" column="0" color="White" />
+    <piece row="1" column="1" color="White" />
+    <piece row="1" column="2" color="White" />
+    <piece row="1" column="3" color="White" />
+    <piece row="1" column="4" color="White" />
+    <piece row="1" column="5" color="White" />
+    <piece row="1" column="6" color="White" />
+    <piece row="1" column="7" color="White" />
+    <piece row="2" column="0" color="Black" />
+    <piece row="2" column="1" color="White" />
+    <piece row="2" column="2" color="Black" />
+    <piece row="2" column="3" color="Black" />
+    <piece row="2" column="4" color="White" />
+    <piece row="2" column="5" color="White" />
+    <piece row="2" column="6" color="Black" />
+    <piece row="2" column="7" color="White" />
+    <piece row="3" column="0" color="Black" />
+    <piece row="3" column="1" color="Black" />
+    <piece row="3" column="2" color="White" />
+    <piece row="3" column="3" color="White" />
+    <piece row="3" column="4" color="Black" />
+    <piece row="3" column="5" color="Black" />
+    <piece row="3" column="6" color="Black" />
+    <piece row="3" column="7" color="White" />
+    <piece row="4" column="0" color="Black" />
+    <piece row="4" column="1" color="Black" />
+    <piece row="4" column="2" color="Black" />
+    <piece row="4" column="3" color="White" />
     <piece row="4" column="4" color="White" />
-    <piece row="5" column="3" color="Black" />
+    <piece row="4" column="5" color="White" />
+    <piece row="4" column="6" color="Black" />
+    <piece row="4" column="7" color="White" />
+    <piece row="5" column="0" color="Black" />
+    <piece row="5" column="1" color="Black" />
+    <piece row="5" column="2" color="White" />
+    <piece row="5" column="3" color="White" />
     <piece row="5" column="4" color="White" />
+    <piece row="5" column="5" color="White" />
+    <piece row="5" column="6" color="Black" />
+    <piece row="5" column="7" color="White" />
+    <piece row="6" column="0" color="Black" />
+    <piece row="6" column="1" color="Black" />
+    <piece row="6" column="2" color="Black" />
+    <piece row="6" column="3" color="White" />
+    <piece row="6" column="4" color="White" />
+    <piece row="6" column="5" color="White" />
+    <piece row="6" column="6" color="Black" />
+    <piece row="6" column="7" color="White" />
+    <piece row="7" column="0" color="Black" />
+    <piece row="7" column="1" color="Black" />
+    <piece row="7" column="2" color="Black" />
+    <piece row="7" column="3" color="Black" />
+    <piece row="7" column="4" color="Black" />
+    <piece row="7" column="5" color="Black" />
+    <piece row="7" column="6" color="Black" />
+    <piece row="7" column="7" color="White" />
   </Board>
   <Players>
-    <Player isAI="false" Color="Black" Name="Människa" TilesRemaining="29" />
-    <Player isAI="false" Color="White" Name="En annan människa" TilesRemaining="29" />
+    <Player isAI="true" Color="Black" Name="Dator" TilesRemaining="0" />
+    <Player isAI="true" Color="White" Name="Dumburk" TilesRemaining="1" />
   </Players>
+  <TurnsLeft Turns="0" />
 </Game>
