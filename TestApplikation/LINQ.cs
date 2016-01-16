@@ -14,16 +14,30 @@ namespace TestApplikation
         private XDocument xdoc;
         private String[,] comparisonArray = new String[8, 8];
         private RulesEngine rulesEngine;
+        private FileSystemWatcher watcher;
 
         public LINQ(RulesEngine rulesEngine)
         {
-            this.rulesEngine = rulesEngine;
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+            this.rulesEngine = rulesEngine;
+            watcher = new FileSystemWatcher(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName);
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Filter = "board.xml";
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.EnableRaisingEvents = true;
         }
 
-        private void onFileChanged(object sender, FileSystemEventArgs e)
+        private void OnChanged(object source, FileSystemEventArgs e)
         {
-            rulesEngine._board._boardArray = loadGame();
+            try
+            {
+                watcher.EnableRaisingEvents = false;
+                rulesEngine._board.loadBoard(loadGame());
+            }
+            finally
+            {
+                watcher.EnableRaisingEvents = true;
+            }
         }
 
         public void updateTilesRemaining(PlayerAbstract currentPlayer)
@@ -40,69 +54,8 @@ namespace TestApplikation
             }
 
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
+        }
 
-            var ints = from str in xdoc.Elements("Player")
-                       where str.Attribute("Color").Value.Equals(currentPlayer._color)
-                       select str.Attribute("TilesRemaining");
-        }
-        /*
-        public Object[] updatedXML()
-        {
-            String[,] fromXMLArray = loadGame();
-            int differenceCounter = 0;
-            Object[] changedPositionArray = new Object[3];
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (fromXMLArray[i, j] != null)
-                    {
-                        if (fromXMLArray[i, j] != comparisonArray[i, j])
-                        {
-                            if (comparisonArray[i, j] != null || differenceCounter > 1)
-                            {
-                                removeTile(i, j);
-                            }
-                            else
-                            {
-                                if ((rulesEngine.roundsLeft % 2 == 0 && "Black".Equals(fromXMLArray[i, j]))
-                                    || (rulesEngine.roundsLeft % 2 != 0 && "White".Equals(fromXMLArray[i, j])))
-                                {
-                                    if (rulesEngine.isMoveLegal(i, j, fromXMLArray[i, j]))
-                                    {
-                                        differenceCounter++;
-                                        if (differenceCounter == 1)
-                                        {
-                                            changedPositionArray[0] = i;
-                                            changedPositionArray[1] = j;
-                                            changedPositionArray[2] = fromXMLArray[i, j];
-                                        }
-                                    }
-                                    else
-                                    {
-                                        removeTile(i, j);
-                                    }
-                                }
-                                else
-                                {
-                                    removeTile(i, j);
-                                }
-                            }
-                        }
-                    }
-                    else if (comparisonArray[i, j] != null)
-                    {
-                        Object[] tempArray = new Object[3];
-                        tempArray[0] = i;
-                        tempArray[1] = j;
-                        tempArray[2] = comparisonArray[i, j];
-                        boardChange(tempArray);
-                    }
-                }
-            }
-            return changedPositionArray;
-        }
-        */
         private void removeTile(int i, int j)
         {
             var xElement = (from el in xdoc.Descendants("piece")
@@ -193,43 +146,10 @@ namespace TestApplikation
             xdoc.Root.Element("TurnsLeft").SetAttributeValue("Turns", oldTurnsLeft - 1);
 
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
-
-            //if (data[2].ToString().Equals("Black") || data[2].ToString().Equals("White"))
-            //{
-            //    comparisonArray[(int)data[0], (int)data[1]] = (String)data[2];
-
-            //    if (xdoc.Root.Element("Board").HasElements)
-            //    {
-            //        IEnumerable<XElement> piece = from pieces in xdoc.Descendants("piece")
-            //                                      where (int.Parse(pieces.Attribute("row").Value) == (int)data[0]
-            //                                      && int.Parse(pieces.Attribute("column").Value) == (int)data[1])
-            //                                      select pieces;
-
-            //        bool exist = true;
-            //        foreach (XElement itemElement in piece)
-            //        {
-            //            itemElement.SetAttributeValue("color", data[2]);
-            //            exist = false;
-            //        }
-
-            //        if (exist)
-            //        {
-            //            xdoc.Root.Element("Board").Add(
-            //                    new XElement("piece",
-            //                    new XAttribute("row", data[0]),
-            //                    new XAttribute("column", data[1]),
-            //                    new XAttribute("color", data[2])));
-            //        }
-            //    }
-
-            //    xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
-            //}
         }
 
         public String[,] loadGame()
         {
-            xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
-
             String[,] loadedGameBoard = new String[8, 8];
 
             List<XElement> tempList = new List<XElement>();

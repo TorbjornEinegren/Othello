@@ -27,8 +27,8 @@ namespace TestApplikation
             rulesEngine.onMoveFeedback += textChange;
             restartButton.Click += new RoutedEventHandler(restartGame);
             game.playerChange += textChange;
-            game.rulesEngine.onWin += textChange;
-            game.rulesEngine.onWinState += game.setWinState;
+            rulesEngine.onWin += textChange;
+            rulesEngine.onWinState += game.setWinState;
             choosePlayers();
         }
 
