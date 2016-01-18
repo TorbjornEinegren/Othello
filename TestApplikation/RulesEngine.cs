@@ -172,10 +172,10 @@ namespace TestApplikation
             int b = checkHorizontalRight(row, column, playerColor);
             int c = checkVerticalUp(row, column, playerColor);
             int d = checkVerticalDown(row, column, playerColor);
-            int e = checkTopLeft(row, column, playerColor);
-            int f = checkTopRight(row, column, playerColor);
-            int g = checkBotLeft(row, column, playerColor);
-            int h = checkBotRight(row, column, playerColor);
+            int e = checkDirection(row, column, playerColor, -1, -1);
+            int f = checkDirection(row, column, playerColor, -1, 1);
+            int g = checkDirection(row, column, playerColor, 1, -1);
+            int h = checkDirection(row, column, playerColor, 1, 1);
             turnHorizontalLeft(a, playerColor, row, column);
             turnHorizontalRight(b, playerColor, row, column);
             turnVerticalUp(c, playerColor, row, column);
@@ -184,6 +184,60 @@ namespace TestApplikation
             turnTopRight(f, playerColor, row, column);
             turnBotLeft(g, playerColor, row, column);
             turnBotRight(h, playerColor, row, column);
+        }
+
+        private int checkDirection(int inputRow, int inputColumn, String playerColor, int rowDirection, int columnDirection)
+        {
+            if ((inputColumn == 7 && columnDirection == 1) || (inputColumn == 0 && columnDirection == -1)
+                || (inputRow == 7 && rowDirection == 1) || (inputRow == 0 && rowDirection == -1)
+                || (playerColor.Equals(board.getBoardPosition(inputRow + rowDirection, inputColumn + columnDirection))))
+            {
+                return inputRow;
+            }
+
+            int lastRow = inputRow;
+            int currentColumn = inputColumn;
+
+            for (int currentRow = inputRow; currentRow < 8 && currentRow >= 0; currentRow = currentRow + rowDirection)
+            {
+                if (board.getBoardPosition(currentRow, currentColumn) == null)
+                {
+                    if ((currentColumn != inputColumn) && (currentRow != inputRow))
+                    {
+                        break;
+                    }
+                }
+                else if (board.getBoardPosition(currentRow, currentColumn).Equals(playerColor))
+                {
+                    lastRow = currentRow;
+                    break;
+                }
+                if ((currentColumn >= 7 && columnDirection == 1) || (currentColumn <= 0 && columnDirection == -1))
+                {
+                    break;
+                }
+                currentColumn = currentColumn + columnDirection;
+            }
+
+            return lastRow;
+            /*do {
+                Console.WriteLine(currentRow + " - " + currentColumn);
+                if (board.getBoardPosition(currentRow, currentColumn) == null)
+                {
+                    if ((currentColumn != inputColumn) && (currentRow != inputRow))
+                    {
+                        return currentRow;
+                    }
+                }
+                else if (board.getBoardPosition(currentRow, currentColumn).Equals(playerColor))
+                {
+                    return currentRow;
+                }
+                currentRow = currentRow + rowDirection;
+                currentColumn = currentColumn + columnDirection;
+            } while ((currentColumn >= 7 && columnDirection == 1) || (currentColumn <= 0 && columnDirection == -1) 
+            || (currentRow >= 7 && rowDirection == 1) || (currentRow <= 0 && rowDirection == -1));
+            return currentRow;*/
         }
 
         private int checkBotLeft(int row, int column, String playerColor)
@@ -549,12 +603,12 @@ namespace TestApplikation
         public int turningTile(int row, int column, String playerColor)
         {
             int turnedTiles = 0;
-            turnedTiles += Math.Abs(checkBotLeft(row, column, playerColor) - row);
-            turnedTiles += Math.Abs(checkBotRight(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkDirection(row, column, playerColor, 1, -1) - row);
+            turnedTiles += Math.Abs(checkDirection(row, column, playerColor, 1, 1) - row);
             turnedTiles += Math.Abs(checkHorizontalLeft(row, column, playerColor) - column);
             turnedTiles += Math.Abs(checkHorizontalRight(row, column, playerColor) - column);
-            turnedTiles += Math.Abs(checkTopLeft(row, column, playerColor) - row);
-            turnedTiles += Math.Abs(checkTopRight(row, column, playerColor) - row);
+            turnedTiles += Math.Abs(checkDirection(row, column, playerColor, -1, -1) - row);
+            turnedTiles += Math.Abs(checkDirection(row, column, playerColor, -1, 1) - row);
             turnedTiles += Math.Abs(checkVerticalDown(row, column, playerColor) - row);
             turnedTiles += Math.Abs(checkVerticalUp(row, column, playerColor) - row);
             return turnedTiles;
