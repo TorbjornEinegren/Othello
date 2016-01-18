@@ -34,7 +34,7 @@ namespace TestApplikation
                 {
                     if (game.rulesEngine.isMoveLegal(row, column, _color))
                     {
-                        int tempScore = game.rulesEngine.turningTile(row, column, _color);
+                        int tempScore = game.rulesEngine.aiTileTurningCounter(row, column, _color);
                         if (tempScore > bestScore)
                         {
                             bestScore = tempScore;
