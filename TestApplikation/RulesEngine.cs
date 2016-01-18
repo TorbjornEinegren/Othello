@@ -33,7 +33,7 @@ namespace TestApplikation
             roundsLeft = 60;
             board = new Board();
             linq = new LINQ(this);
-            onBoardChanged += linq.boardChange;
+            onBoardChanged += linq.updateBoardOnChange;
         }
 
         private void moveCounter()
@@ -43,6 +43,9 @@ namespace TestApplikation
 
         private void winState()
         {
+            //If the game has ended, locks the game from doing additional moves
+            //Counts the score of both players
+            //Pushes a string with information about who won to the UI
             Action<Boolean> winState = onWinState;
             if (winState != null)
             {
@@ -65,7 +68,7 @@ namespace TestApplikation
                     }
                     else
                     {
-                        Console.WriteLine("This should rarely happen");
+                        //If a player couldn't place a tile, this should happen
                     }
                 }
             }
@@ -102,6 +105,8 @@ namespace TestApplikation
 
         public void forfeitRound()
         {
+            //If a player can't make a move due to the other tiles placement
+            //An event pushes the turn to the other player
             moveCounter();
 
             if (roundsLeft == 0)
@@ -122,9 +127,14 @@ namespace TestApplikation
 
         public void playMade(int row, int column, PlayerAbstract currentPlayer)
         {
+            //Checks if the suggested move if allowed
+            //If allowed the it updates the tiles remaining for the player making the move, both in XML and in the playerobject
+            //It then calls the method makeMove and pushes an event to the LINQ class telling it to save the new board positions to XML
+            //If not allowed it pushes an event to the UI telling the player that the move is impossible
             String playerColor = currentPlayer._color;
             if (isMoveLegal(row, column, playerColor))
             {
+                linq.playerNotDoingThings = false;
                 linq.updateTilesRemaining(currentPlayer);
                 makeMove(row, column, playerColor);
 
@@ -133,6 +143,7 @@ namespace TestApplikation
                 {
                     onBoardChanged(_board._boardArray);
                 }
+                linq.playerNotDoingThings = true;
             }
             else
             {
@@ -151,7 +162,12 @@ namespace TestApplikation
 
         private async void makeMove(int i, int j, String playerColor)
         {
-            turnTile(i, j, playerColor);
+            //It calls the method for checking all directions and turning tiles first
+            //Then it sets the position on the board to the selected coordinates
+            //It updates the turns left on the game and then waits a short while
+            //Checks if a player has won
+            //Pushes an event to the gameengine telling it to start the round for the next player
+            checkAndTurnTiles(i, j, playerColor);
             board.setBoardPosition(i, j, playerColor);
             moveCounter();
             await Task.Delay(90);
@@ -166,15 +182,25 @@ namespace TestApplikation
             }
         }
 
-        private void turnTile(int row, int column, String playerColor)
+        private void checkAndTurnTiles(int row, int column, String playerColor)
         {
+            //saves a variable as the result from the checkDirection won't be the same after the first tile have been placed
+            
+            //Checks horizontally left
             int a = checkDirection(row, column, playerColor, 0, -1);
+            //Checks horizontally right
             int b = checkDirection(row, column, playerColor, 0, 1);
+            //Checks vertical up
             int c = checkDirection(row, column, playerColor, -1, 0);
+            //Checks vertical down
             int d = checkDirection(row, column, playerColor, 1, 0);
+            //Checks towards the top-left corner
             int e = checkDirection(row, column, playerColor, -1, -1);
+            //Checks towards the top-right corner
             int f = checkDirection(row, column, playerColor, -1, 1);
+            //Checks towards the bottom-left corner
             int g = checkDirection(row, column, playerColor, 1, -1);
+            //Checks towards the bottom-right corner
             int h = checkDirection(row, column, playerColor, 1, 1);
             turnHorizontalLeft(a, playerColor, row, column);
             turnHorizontalRight(b, playerColor, row, column);
@@ -188,6 +214,13 @@ namespace TestApplikation
 
         private int checkDirection(int inputRow, int inputColumn, String playerColor, int rowDirection, int columnDirection)
         {
+            //First checks so that the first move won't go out of bounds or if the first tile it will find is the same color
+            //As the method is universal we have to check what value to return as the turning needs column when turning horizontally
+            //Loops as long as it is within the gameboard (0-7)
+            //Unless it finds a tile of the same color it will return the original row and column coordinates
+            //If it finds one of the same color it will return that row or column depending on direction it is checking in
+            //As this method is used by the AI to count the best place to place the tile, and that the selected coordinate yet has 
+            //to place a tile on it we need to skip that return during the first loop
             if ((inputColumn == 7 && columnDirection == 1) || (inputColumn == 0 && columnDirection == -1)
                 || (inputRow == 7 && rowDirection == 1) || (inputRow == 0 && rowDirection == -1)
                 || (playerColor.Equals(board.getBoardPosition(inputRow + rowDirection, inputColumn + columnDirection))))
@@ -258,6 +291,8 @@ namespace TestApplikation
             }
         }
 
+        //Methods for turning, lastRow/lastColumn is the coordinate that checkDirection finds
+        
         private void turnBotLeft(int lastRow, String playerColor, int row, int currentColumn)
         {
             for (int i = row; i < lastRow; i++)
@@ -340,6 +375,9 @@ namespace TestApplikation
 
         public bool isMoveLegal(int row, int column, String playerColor)
         {
+            //Checks if the move is legal through several other methods
+            //aiTileTurningCounter
+            //Returns true if move is legal
             bool moveIsLegal = true;
             if (board.getBoardPosition(row, column) != null)
             {
@@ -358,6 +396,7 @@ namespace TestApplikation
 
         public int aiTileTurningCounter(int row, int column, String playerColor)
         {
+            //Counts how many tiles would be turned if the move to the suggested coordinates was made
             int turnedTiles = 0;
             turnedTiles += Math.Abs(checkDirection(row, column, playerColor, 1, -1) - row);
             turnedTiles += Math.Abs(checkDirection(row, column, playerColor, 1, 1) - row);
@@ -372,6 +411,7 @@ namespace TestApplikation
 
         private bool nextToOthers(int row, int column)
         {
+            //Checks so that the suggested tile placement is next to another tile
             bool nextToOther = false;
             int maxRow = row + 1;
             int minRow = row - 1;

@@ -29,6 +29,7 @@ namespace TestApplikation
             game.playerChange += textChange;
             rulesEngine.onWin += textChange;
             rulesEngine.onWinState += game.setWinState;
+            rulesEngine.linq.onXMLChanged += guiAfterXMLUpdate;
             choosePlayers();
         }
 
@@ -153,20 +154,34 @@ namespace TestApplikation
 
         public void onBoardChange(int[] argArr)
         {
-            int row = argArr[0];
-            int column = argArr[1];
-            Image image = changeColor(row, column);
-            System.Windows.Controls.Button newBtn = new Button();
+            Application.Current.Dispatcher.Invoke(
+                new Action(() =>
+                {
+                    int row = argArr[0];
+                    int column = argArr[1];
+                    Image image = changeColor(row, column);
+                    System.Windows.Controls.Button newBtn = new Button();
 
-            newBtn.Name = "_" + row + "_" + column;
-            newBtn.Height = 50;
-            newBtn.Width = 50;
-            newBtn.Content = image;
-            newBtn.Click += new RoutedEventHandler(clickButton);
+                    newBtn.Name = "_" + row + "_" + column;
+                    newBtn.Height = 50;
+                    newBtn.Width = 50;
+                    newBtn.Content = image;
+                    newBtn.Click += new RoutedEventHandler(clickButton);
 
-            Grid.SetRow(newBtn, row);
-            Grid.SetColumn(newBtn, column);
-            buttonGrid.Children.Add(newBtn);
+                    Grid.SetRow(newBtn, row);
+                    Grid.SetColumn(newBtn, column);
+                    buttonGrid.Children.Add(newBtn);
+                }));
+        }        public void guiAfterXMLUpdate()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    int[] tempArr = { i, j };
+                    onBoardChange(tempArr);
+                }
+            }
         }        public void textChange(String newText)
         {
             playerBox.Text = newText;

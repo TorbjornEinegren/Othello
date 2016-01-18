@@ -29,23 +29,7 @@ namespace TestApplikation
 
         public void loadBoard(String[,] loadedBoard)
         {
-            boardArray = new String[8, 8];
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (loadedBoard[i, j] != null)
-                    {
-                        _boardArray[i, j] = loadedBoard[i, j];
-                        int[] changedPosition = { i, j };
-                        Action<int[]> localOnChange = onBoardChange;
-                        if (localOnChange != null)
-                        {
-                            localOnChange(changedPosition);
-                        }
-                    }
-                }
-            }
+            boardArray = loadedBoard;
         }
 
         public Action<int[]> onBoardChange { get; set; }

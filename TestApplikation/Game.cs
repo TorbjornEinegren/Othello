@@ -96,8 +96,6 @@ namespace TestApplikation
         public void restartGame()
         {
             gameEnded = true;
-            rulesEngine.linq.gameEnd();
-            rulesEngine.linq.initBoard();
             rulesEngine.roundsLeft = 60;
         }
 
@@ -118,14 +116,12 @@ namespace TestApplikation
                 {
                     player1 = new Human("Människa", "White");
                     player2 = new Human("En annan människa", "Black");
-                    rulesEngine.linq.createPlayers(player1, player2);
                     tempPlayer = player2;
                 }
                 else if (colorStr.Equals("dark"))
                 {
                     player1 = new Human("Människa", "Black");
                     player2 = new Human("En annan människa", "White");
-                    rulesEngine.linq.createPlayers(player1, player2);
                     tempPlayer = player1;
                 }
             }
@@ -135,7 +131,6 @@ namespace TestApplikation
                 {
                     player1 = new Human("Människa", "White");
                     player2 = new AI("Dumburk", "Black");
-                    rulesEngine.linq.createPlayers(player1, player2);
                     tempPlayer = player2;
                 }
                 else if (colorStr.Equals("dark"))
