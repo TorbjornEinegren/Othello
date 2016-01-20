@@ -30,6 +30,18 @@ namespace TestApplikation
         public void loadBoard(String[,] loadedBoard)
         {
             boardArray = loadedBoard;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    int[] argArr = { i, j };
+                    Action<int[]> onXMLChange = onBoardChange;
+                    if (onXMLChange != null)
+                    {
+                        onXMLChange(argArr);
+                    }
+                }
+            }
         }
 
         public Action<int[]> onBoardChange { get; set; }

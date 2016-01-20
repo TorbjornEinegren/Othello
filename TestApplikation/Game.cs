@@ -41,7 +41,6 @@ namespace TestApplikation
             PlayerAbstract[] loadedPlayers = rulesEngine.linq.loadPlayers();
             player1 = loadedPlayers[0];
             player2 = loadedPlayers[1];
-
             if (player1._tilesRemaining > player2._tilesRemaining)
             {
                 currentPlayer = player2;

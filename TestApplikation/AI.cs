@@ -15,7 +15,7 @@ namespace TestApplikation
 
         public async override void doThings(Game game)
         {
-            await Task.Delay(100);
+            await Task.Delay(260);
 
             if (_tilesRemaining > 0)
             {

@@ -29,7 +29,7 @@ namespace TestApplikation
             game.playerChange += textChange;
             rulesEngine.onWin += textChange;
             rulesEngine.onWinState += game.setWinState;
-            rulesEngine.linq.onXMLChanged += guiAfterXMLUpdate;
+            rulesEngine.linq.onXMLChanged += onBoardChange;
             choosePlayers();
         }
 
@@ -172,16 +172,6 @@ namespace TestApplikation
                     Grid.SetColumn(newBtn, column);
                     buttonGrid.Children.Add(newBtn);
                 }));
-        }        public void guiAfterXMLUpdate()
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    int[] tempArr = { i, j };
-                    onBoardChange(tempArr);
-                }
-            }
         }        public void textChange(String newText)
         {
             playerBox.Text = newText;

@@ -170,7 +170,7 @@ namespace TestApplikation
             checkAndTurnTiles(i, j, playerColor);
             board.setBoardPosition(i, j, playerColor);
             moveCounter();
-            await Task.Delay(90);
+            await Task.Delay(250);
             if (roundsLeft == 0)
             {
                 winState();
