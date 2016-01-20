@@ -19,6 +19,7 @@ namespace TestApplikation
 
         public LINQ(RulesEngine rulesEngine)
         {
+            //Starts the filesystemwatcher
             this.rulesEngine = rulesEngine;
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
             watcher = new FileSystemWatcher(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName);
@@ -32,6 +33,7 @@ namespace TestApplikation
 
         private void OnChanged(object source, FileSystemEventArgs e)
         {
+            //loads the whole board from the XML and replaces the current gameboard
             try
             {
                 rulesEngine._board.loadBoard(loadGame());
@@ -45,6 +47,8 @@ namespace TestApplikation
 
         public void updateTilesRemaining(PlayerAbstract currentPlayer)
         {
+            //Updates the number of tiles remaining in the playerobject
+            //Reads the current number of tiles remaining in the XML and rewrites it -1
             currentPlayer.updateTiles();
 
             IEnumerable<XElement> piece = from pieces in xdoc.Descendants("Player")
@@ -59,18 +63,9 @@ namespace TestApplikation
             xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
         }
 
-        private void removeTile(int i, int j)
-        {
-            var xElement = (from el in xdoc.Descendants("piece")
-                            where int.Parse(el.Attribute("row").Value).Equals(i)
-                            && int.Parse(el.Attribute("column").Value).Equals(j)
-                            select el);
-            xElement.Remove();
-            xdoc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
-        }
-
         public void createPlayers(PlayerAbstract player1, PlayerAbstract player2)
         {
+            //Adds the new players to the XML-file
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
 
             if (!(xdoc.Root.Element("Players").HasElements))
@@ -91,6 +86,7 @@ namespace TestApplikation
 
         public void gameEnd()
         {
+            //Old players and pieces placed are removed
             xdoc.Descendants("Players").Descendants().Remove();
             xdoc.Descendants("Board").Descendants().Remove();
             xdoc.Descendants("TurnsLeft").Remove();
@@ -100,6 +96,8 @@ namespace TestApplikation
 
         public void initBoard()
         {
+            //When a new game session is started gameend is called
+            //The initial 4 mid-pieces are placed
             gameEnd();
             xdoc.Root.Element("Board").Add(
                 new XElement("piece",
@@ -130,6 +128,9 @@ namespace TestApplikation
 
         public void updateBoardOnChange(String[,] data)
         {
+            //When a player has placed a piece and the following pieces have been turned
+            //Adds the pieces to the XML if the position isn't null
+            //Parses the current amount of turns left from the XML and removes 1 and saves it again
             xdoc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\board.xml");
             xdoc.Descendants("Board").Descendants().Remove();
 
@@ -155,6 +156,9 @@ namespace TestApplikation
 
         public String[,] loadGame()
         {
+            //If a player currently isn't doing anything
+            //Wait for a short time and load the document again to find new changes
+            //Create a new String Array and read the pieces found in XML to it
             if (playerNotDoingThings)
             {
                 System.Threading.Thread.Sleep(100);
@@ -178,6 +182,8 @@ namespace TestApplikation
 
         public PlayerAbstract[] loadPlayers()
         {
+            //Create an array of players
+            //Read the player info from XML and create two new playerobjects with the data
             PlayerAbstract[] players = new PlayerAbstract[2];
 
             List<XElement> tempList = new List<XElement>();
@@ -206,6 +212,7 @@ namespace TestApplikation
 
         public int loadTurnsRemaining()
         {
+            //Read the turnsremaining from the XML
             int turnsRemaining = int.Parse(xdoc.Root.Element("TurnsLeft").Attribute("Turns").Value);
             return turnsRemaining;
         }
